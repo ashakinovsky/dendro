@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dendrology Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#1D9E75;--green-light:#E1F5EE;--green-dark:#0F6E56;
+  --amber:#BA7517;--amber-light:#FAEEDA;
+  --red:#A32D2D;--red-light:#FCEBEB;
+  --bg:#ffffff;--bg2:#f6f5f0;--bg3:#efede6;
+  --text:#1a1a18;--text2:#5f5e5a;--text3:#888780;
+  --border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.22);
+  --radius:8px;--radius-lg:12px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1a;--bg2:#242422;--bg3:#2c2c2a;
+  --text:#f0ede6;--text2:#b4b2a9;--text3:#888780;
+  --border:rgba(255,255,255,0.12);--border2:rgba(255,255,255,0.22);
+  --green:#1D9E75;--green-light:#04342C;--green-dark:#5DCAA5;
+  --amber-light:#412402;--red-light:#501313;
+}}
+body{font-family:'Source Sans 3',sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;padding:24px 16px 48px}
+#app{max-width:660px;margin:0 auto;background:var(--bg);border-radius:var(--radius-lg);border:0.5px solid var(--border);padding:24px}
+.header{text-align:center;padding-bottom:16px;border-bottom:0.5px solid var(--border);margin-bottom:16px;position:relative}
+.header h1{font-family:'Playfair Display',serif;font-size:26px;font-weight:600;color:var(--text);letter-spacing:-0.3px}
+.header p{font-size:14px;color:var(--text2);margin-top:4px}
+.manage-btn{position:absolute;top:0;right:0;padding:6px 12px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg);color:var(--text2);font-size:12px;font-family:'Source Sans 3',sans-serif;font-weight:600;cursor:pointer;transition:background 0.15s}
+.manage-btn:hover{background:var(--bg2)}
+.scorebar{display:flex;gap:8px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+.score-pill{background:var(--bg2);border:0.5px solid var(--border);border-radius:20px;padding:5px 14px;font-size:13px;color:var(--text2)}
+.score-pill span{font-weight:600;color:var(--text)}
+.progress-bar{height:3px;background:var(--bg2);border-radius:2px;margin-bottom:18px;overflow:hidden}
+.progress-fill{height:100%;background:var(--green);border-radius:2px;transition:width 0.4s ease}
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.filter-btn{font-size:11px;padding:4px 10px;border-radius:12px;border:0.5px solid var(--border2);background:var(--bg);color:var(--text2);cursor:pointer;font-family:'Source Sans 3',sans-serif;transition:all 0.15s}
+.filter-btn.active{background:var(--green);border-color:var(--green-dark);color:#fff;font-weight:600}
+.img-wrap{width:100%;aspect-ratio:16/9;background:var(--bg2);border-radius:var(--radius-lg);overflow:hidden;border:0.5px solid var(--border);margin-bottom:16px;position:relative}
+.img-wrap img{width:100%;height:100%;object-fit:contain;display:block;transition:opacity 0.3s}
+.img-wrap img.loading{opacity:0}
+.no-img{display:flex;align-items:center;justify-content:center;height:100%;font-size:14px;color:var(--text3);font-style:italic}
+.img-loading-msg{display:flex;align-items:center;justify-content:center;height:100%;font-size:14px;color:var(--text3)}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+@media(max-width:480px){.fields{grid-template-columns:1fr}}
+.field-group{display:flex;flex-direction:column;gap:4px}
+.field-group label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px}
+.field-group input{border:0.5px solid var(--border2);border-radius:var(--radius);padding:8px 10px;font-size:14px;font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--text);transition:border-color 0.2s,background 0.2s;outline:none;width:100%}
+#fScientific{font-style:italic}
+.field-group input:focus{border-color:var(--green);box-shadow:0 0 0 2px rgba(29,158,117,0.15)}
+.field-group input.correct{background:var(--green-light);border-color:var(--green);color:var(--green-dark)}
+.field-group input.incorrect{background:var(--red-light);border-color:var(--red);color:var(--red)}
+.actions{display:flex;gap:8px;margin-bottom:12px}
+.btn{flex:1;padding:9px 12px;border-radius:var(--radius);font-size:14px;font-family:'Source Sans 3',sans-serif;font-weight:600;cursor:pointer;border:0.5px solid var(--border2);background:var(--bg);color:var(--text);transition:background 0.15s,transform 0.1s}
+.btn:hover{background:var(--bg2)}
+.btn:active{transform:scale(0.98)}
+.btn:disabled{opacity:0.45;cursor:default}
+.btn-primary{background:var(--green);border-color:var(--green-dark);color:#fff}
+.btn-primary:hover{background:var(--green-dark)}
+.feedback{border-radius:var(--radius);padding:10px 14px;font-size:13px;line-height:1.6;margin-bottom:10px;border:0.5px solid transparent}
+.feedback.correct-all{background:var(--green-light);border-color:#5DCAA5;color:var(--green-dark)}
+.feedback.partial{background:var(--amber-light);border-color:#EF9F27;color:var(--amber)}
+.feedback.wrong{background:var(--red-light);border-color:#F09595;color:var(--red)}
+.feedback-row{display:flex;align-items:center;gap:6px;padding:2px 0}
+.feedback-row .icon{font-size:13px;width:16px;text-align:center}
+.feedback-row .answer{font-weight:600}
+.mode-info{text-align:center;font-size:12px;color:var(--text3);padding-top:8px;border-top:0.5px solid var(--border);margin-top:4px}
+.mode-info strong{color:var(--text2)}
+.empty-state{text-align:center;padding:40px 20px;color:var(--text3)}
+.empty-state h3{font-size:16px;margin-bottom:8px;color:var(--text2)}
+.empty-state p{font-size:13px;line-height:1.6}
+.empty-btn{margin-top:16px;padding:9px 20px;border-radius:var(--radius);border:0.5px solid var(--green-dark);background:var(--green);color:#fff;font-size:14px;font-family:'Source Sans 3',sans-serif;font-weight:600;cursor:pointer}
+/* End modal */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--bg);border-radius:var(--radius-lg);border:0.5px solid var(--border);padding:28px 24px;max-width:380px;width:90%;text-align:center}
+.modal h2{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:8px;color:var(--text)}
+.modal .big-score{font-size:52px;font-weight:600;color:var(--green);margin:12px 0}
+.modal p{font-size:14px;color:var(--text2);margin-bottom:20px}
+.inat-credit{position:absolute;bottom:6px;right:8px;font-size:10px;color:rgba(255,255,255,0.85);text-shadow:0 1px 3px rgba(0,0,0,0.6);background:rgba(0,0,0,0.25);padding:2px 6px;border-radius:4px;pointer-events:none;display:none}
+/* Panel */
+.panel-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:flex-start;justify-content:center;padding:24px 16px;overflow-y:auto}
+.panel-bg.open{display:flex}
+.panel{background:var(--bg);border-radius:var(--radius-lg);border:0.5px solid var(--border);width:100%;max-width:640px;margin:auto}
+.panel-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:0.5px solid var(--border)}
+.panel-header h2{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;color:var(--text)}
+.panel-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--text3);line-height:1;padding:4px 8px}
+.panel-body{padding:20px 24px}
+/* Tabs */
+.tab-bar{display:flex;gap:0;border:0.5px solid var(--border2);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.tab-btn{flex:1;padding:8px 12px;border:none;background:var(--bg);color:var(--text2);font-size:13px;font-family:'Source Sans 3',sans-serif;font-weight:600;cursor:pointer;transition:background 0.15s;border-right:0.5px solid var(--border2)}
+.tab-btn:last-child{border-right:none}
+.tab-btn.active{background:var(--green);color:#fff}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+/* List search */
+.search-box{position:relative;margin-bottom:10px}
+.search-box input{width:100%;border:0.5px solid var(--border2);border-radius:var(--radius);padding:9px 12px 9px 36px;font-size:14px;font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--text);outline:none}
+.search-box input:focus{border-color:var(--green);box-shadow:0 0 0 2px rgba(29,158,117,0.15)}
+.search-box .s-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--text3);pointer-events:none}
+.list-controls{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.list-controls span{font-size:12px;color:var(--text3)}
+.select-all-btn{font-size:12px;color:var(--green);background:none;border:none;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-weight:600}
+.master-list{max-height:340px;overflow-y:auto;border:0.5px solid var(--border);border-radius:var(--radius)}
+.master-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:0.5px solid var(--border);cursor:pointer;transition:background 0.1s}
+.master-item:last-child{border-bottom:none}
+.master-item:hover{background:var(--bg2)}
+.master-item input[type=checkbox]{width:15px;height:15px;accent-color:var(--green);flex-shrink:0;cursor:pointer}
+.master-item .mi-text{flex:1;min-width:0}
+.master-item .mi-common{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.master-item .mi-sci{font-size:12px;color:var(--text2);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.master-item .mi-tags{display:flex;gap:4px;margin-top:2px;flex-wrap:wrap}
+.tag{font-size:10px;padding:2px 6px;border-radius:10px;background:var(--bg2);color:var(--text3);border:0.5px solid var(--border)}
+/* iNat tab */
+.inat-row{display:flex;gap:8px;margin-bottom:10px}
+.inat-row input{flex:1;border:0.5px solid var(--border2);border-radius:var(--radius);padding:9px 12px;font-size:14px;font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--text);outline:none}
+.inat-row input:focus{border-color:var(--green);box-shadow:0 0 0 2px rgba(29,158,117,0.15)}
+.inat-row button{padding:9px 16px;border-radius:var(--radius);border:0.5px solid var(--green-dark);background:var(--green);color:#fff;font-size:14px;font-family:'Source Sans 3',sans-serif;font-weight:600;cursor:pointer;white-space:nowrap}
+.inat-row button:hover{background:var(--green-dark)}
+.inat-row button:disabled{opacity:0.5;cursor:default}
+.inat-results{border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;display:none}
+.inat-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:0.5px solid var(--border);gap:12px}
+.inat-item:last-child{border-bottom:none}
+.inat-item:hover{background:var(--bg2)}
+.inat-info{flex:1;min-width:0}
+.inat-common{font-size:14px;font-weight:600;color:var(--text)}
+.inat-sci{font-size:12px;color:var(--text2);font-style:italic}
+.inat-meta{font-size:11px;color:var(--text3);margin-top:2px}
+.inat-add{padding:5px 12px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg);color:var(--text2);font-size:12px;font-family:'Source Sans 3',sans-serif;font-weight:600;cursor:pointer;flex-shrink:0}
+.inat-add:hover{background:var(--green-light);color:var(--green-dark);border-color:var(--green)}
+.inat-add.added{background:var(--green-light);color:var(--green-dark);border-color:var(--green);cursor:default}
+.search-status{font-size:13px;color:var(--text3);padding:12px 0;text-align:center;display:none}
+/* My list in panel */
+.my-list-wrap{max-height:300px;overflow-y:auto;border:0.5px solid var(--border);border-radius:var(--radius)}
+.my-item{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:0.5px solid var(--border);gap:10px}
+.my-item:last-child{border-bottom:none}
+.my-common{font-size:13px;font-weight:600;color:var(--text)}
+.my-sci{font-size:12px;color:var(--text2);font-style:italic}
+.my-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px}
+.remove-btn{background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;padding:2px 6px;border-radius:4px;line-height:1;flex-shrink:0}
+.remove-btn:hover{background:var(--red-light);color:var(--red)}
+.no-items{text-align:center;padding:20px;font-size:13px;color:var(--text3)}
+.section-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;margin-top:16px}
+.panel-footer{padding:16px 24px;border-top:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.species-count-label{font-size:13px;color:var(--text2)}
+.done-btn{padding:9px 24px;border-radius:var(--radius);border:0.5px solid var(--green-dark);background:var(--green);color:#fff;font-size:14px;font-family:'Source Sans 3',sans-serif;font-weight:600;cursor:pointer}
+.done-btn:hover{background:var(--green-dark)}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="header">
+    <button class="manage-btn" onclick="openPanel()">⊕ Manage species</button>
+    <h1>Dendrology Quiz</h1>
+    <p>Enter the common name, scientific name, and family for each specimen</p>
+  </div>
+
+  <div id="quizContent">
+    <div class="scorebar">
+      <div class="score-pill">Score <span id="scoreDisplay">0</span>/<span id="totalDisplay">0</span></div>
+      <div class="score-pill">Question <span id="qNum">1</span>/<span id="qTotal">—</span></div>
+      <div class="score-pill">Streak <span id="streak">0</span></div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="filter-bar" id="filterBar"></div>
+    <div class="img-wrap" id="imgWrap">
+      <div class="img-loading-msg" id="imgLoadingMsg">Loading photo…</div>
+      <img id="animalImg" src="" alt="Plant to identify" style="display:none">
+      <div class="no-img" id="noImg" style="display:none">No image available</div>
+      <div class="inat-credit" id="inatCredit">Photo © iNaturalist</div>
+    </div>
+    <div class="fields" style="grid-template-columns:1fr 1fr 1fr">
+      <div class="field-group"><label>Common name</label><input id="fCommon" placeholder="e.g. White Oak" autocomplete="off" spellcheck="false"></div>
+      <div class="field-group"><label>Scientific name</label><input id="fScientific" placeholder="e.g. Quercus alba" autocomplete="off" spellcheck="false"></div>
+      <div class="field-group"><label>Family</label><input id="fFamily" placeholder="e.g. Fagaceae" autocomplete="off" spellcheck="false"></div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="hintBtn" onclick="showHint()">Hint</button>
+      <button class="btn btn-primary" id="submitBtn" onclick="checkAnswer()">Submit</button>
+      <button class="btn" id="skipBtn" onclick="nextAnimal()">Skip →</button>
+    </div>
+    <div id="feedbackBox"></div>
+    <div class="mode-info">Press <strong>Enter</strong> to submit · <strong>Tab</strong> to move between fields</div>
+  </div>
+
+  <div id="emptyState" class="empty-state" style="display:none">
+    <h3>No species added yet</h3>
+    <p>Use the species manager to browse the master list and add species as you learn them in your dendrology course.</p>
+    <button class="empty-btn" onclick="openPanel()">⊕ Add your first species</button>
+  </div>
+</div>
+
+<!-- End modal -->
+<div class="modal-bg" id="endModal">
+  <div class="modal">
+    <h2>Quiz complete!</h2>
+    <div class="big-score" id="finalScore">—</div>
+    <p id="finalTime" style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:4px"></p>
+    <p id="finalMsg"></p>
+    <button class="btn btn-primary" id="retryBtn" style="width:100%;margin-bottom:8px" onclick="retryMissed()">Retry missed questions</button>
+    <button class="btn" style="width:100%" onclick="restartQuiz()">Start over (all questions)</button>
+  </div>
+</div>
+
+<!-- Species manager panel -->
+<div class="panel-bg" id="managePanel">
+  <div class="panel">
+    <div class="panel-header">
+      <h2>Manage species</h2>
+      <button class="panel-close" onclick="closePanel()">×</button>
+    </div>
+    <div class="panel-body">
+      <!-- Tabs -->
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('list',this)">Browse master list</button>
+        <button class="tab-btn" onclick="switchTab('inat',this)">Search iNaturalist</button>
+        <button class="tab-btn" onclick="switchTab('mine',this)">My species (<span id="myCount">0</span>)</button>
+      </div>
+
+      <!-- Tab: Master list -->
+      <div class="tab-pane active" id="tab-list">
+        <div class="search-box">
+          <span class="s-icon">⌕</span>
+          <input id="listSearch" placeholder="Filter by name…" oninput="filterMasterList()" autocomplete="off">
+        </div>
+        <div class="list-controls">
+          <span id="listMatchCount"></span>
+          <button class="select-all-btn" onclick="toggleSelectVisible()">Select all visible</button>
+        </div>
+        <div class="master-list" id="masterList"></div>
+      </div>
+
+      <!-- Tab: iNaturalist search -->
+      <div class="tab-pane" id="tab-inat">
+        <p style="font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.5">Can't find a species on the master list? Search iNaturalist to add it — taxonomy is pulled automatically.</p>
+        <div class="inat-row">
+          <input id="inatSearch" placeholder="Search for any plant or tree…" autocomplete="off">
+          <button id="inatBtn" onclick="doInatSearch()">Search</button>
+        </div>
+        <div id="inatStatus" class="search-status"></div>
+        <div id="inatResults" class="inat-results"></div>
+      </div>
+
+      <!-- Tab: My species -->
+      <div class="tab-pane" id="tab-mine">
+        <div class="section-label">Species in your quiz (<span id="myCountTab">0</span>)</div>
+        <div class="my-list-wrap" id="myList"></div>
+      </div>
+    </div>
+
+    <div class="panel-footer">
+      <span class="species-count-label"><span id="footerCount">0</span> species in quiz</span>
+      <button class="done-btn" onclick="closePanel()">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Master species list ──────────────────────────────────────────────────────
+const MASTER = [
+  {common:"Fraser fir",scientific:"Abies fraseri",family:"Pinaceae",order:"Pinales"},
+  {common:"Southern sugar maple",scientific:"Acer floridanum",family:"Sapindaceae",order:"Sapindales"},
+  {common:"Boxelder",scientific:"Acer negundo var. negundo",family:"Sapindaceae",order:"Sapindales"},
+  {common:"Japanese maple",scientific:"Acer palmatum",family:"Sapindaceae",order:"Sapindales"},
+  {common:"Red maple",scientific:"Acer rubrum var. rubrum",family:"Sapindaceae",order:"Sapindales"},
+  {common:"Silver maple",scientific:"Acer saccharinum",family:"Sapindaceae",order:"Sapindales"},
+  {common:"Buckeye",scientific:"Aesculus spp.",family:"Sapindaceae",order:"Sapindales"},
+  {common:"Tree-of-heaven",scientific:"Ailanthus altissima",family:"Simaroubaceae",order:"Sapindales"},
+  {common:"Mimosa/Silk tree",scientific:"Albizia julibrissin",family:"Fabaceae",order:"Fabales"},
+  {common:"Hazel alder",scientific:"Alnus serrulata",family:"Betulaceae",order:"Fagales"},
+  {common:"Serviceberry",scientific:"Amelanchier spp.",family:"Rosaceae",order:"Rosales"},
+  {common:"Heartleaf peppervine",scientific:"Ampelopsis glandulosa",family:"Vitaceae",order:"Vitales"},
+  {common:"Devil's walking stick",scientific:"Aralia spinosa",family:"Araliaceae",order:"Apiales"},
+  {common:"Pawpaw",scientific:"Asimina triloba",family:"Annonaceae",order:"Magnoliales"},
+  {common:"Sea myrtle",scientific:"Baccharis halimifolia",family:"Asteraceae",order:"Asterales"},
+  {common:"Flowering dogwood",scientific:"Benthamidia florida",family:"Cornaceae",order:"Cornales"},
+  {common:"River birch",scientific:"Betula nigra",family:"Betulaceae",order:"Fagales"},
+  {common:"Crossvine",scientific:"Bignonia capreolata",family:"Bignoniaceae",order:"Lamiales"},
+  {common:"American beautyberry",scientific:"Callicarpa americana",family:"Lamiaceae",order:"Lamiales"},
+  {common:"Carolina allspice",scientific:"Calycanthus floridus",family:"Calycanthaceae",order:"Laurales"},
+  {common:"Trumpet creeper",scientific:"Campsis radicans",family:"Bignoniaceae",order:"Lamiales"},
+  {common:"American hornbeam",scientific:"Carpinus caroliniana var. virginiana",family:"Betulaceae",order:"Fagales"},
+  {common:"Bitternut hickory",scientific:"Carya cordiformis",family:"Juglandaceae",order:"Fagales"},
+  {common:"Pignut hickory",scientific:"Carya glabra",family:"Juglandaceae",order:"Fagales"},
+  {common:"Pecan",scientific:"Carya illinoinensis",family:"Juglandaceae",order:"Fagales"},
+  {common:"False shagbark hickory",scientific:"Carya ovalis",family:"Juglandaceae",order:"Fagales"},
+  {common:"Shagbark hickory",scientific:"Carya ovata",family:"Juglandaceae",order:"Fagales"},
+  {common:"Sand hickory",scientific:"Carya pallida",family:"Juglandaceae",order:"Fagales"},
+  {common:"Mockernut hickory",scientific:"Carya tomentosa",family:"Juglandaceae",order:"Fagales"},
+  {common:"American chestnut",scientific:"Castanea dentata",family:"Fagaceae",order:"Fagales"},
+  {common:"Chinese chestnut",scientific:"Castanea mollissima",family:"Fagaceae",order:"Fagales"},
+  {common:"Northern catalpa",scientific:"Catalpa speciosa",family:"Bignoniaceae",order:"Lamiales"},
+  {common:"Deodar cedar",scientific:"Cedrus deodara",family:"Pinaceae",order:"Pinales"},
+  {common:"Oriental bittersweet",scientific:"Celastrus orbiculatus",family:"Celastraceae",order:"Celastrales"},
+  {common:"Sugarberry",scientific:"Celtis laevigata",family:"Cannabaceae",order:"Rosales"},
+  {common:"Dwarf hackberry",scientific:"Celtis pumila",family:"Cannabaceae",order:"Rosales"},
+  {common:"Buttonbush",scientific:"Cephalanthus occidentalis",family:"Rubiaceae",order:"Gentianales"},
+  {common:"Eastern redbud",scientific:"Cercis canadensis",family:"Fabaceae",order:"Fabales"},
+  {common:"Atlantic white cedar",scientific:"Chamaecyparis thyoides",family:"Cupressaceae",order:"Pinales"},
+  {common:"White fringetree",scientific:"Chionanthus virginicus",family:"Oleaceae",order:"Lamiales"},
+  {common:"Yellowwood",scientific:"Cladrastis kentukea",family:"Fabaceae",order:"Fabales"},
+  {common:"Sweet pepperbush",scientific:"Clethra alnifolia",family:"Clethraceae",order:"Ericales"},
+  {common:"American hazelnut",scientific:"Corylus americana",family:"Betulaceae",order:"Fagales"},
+  {common:"Hawthorn",scientific:"Crataegus spp.",family:"Rosaceae",order:"Rosales"},
+  {common:"Titi/Swamp cyrilla",scientific:"Cyrilla racemiflora",family:"Cyrillaceae",order:"Ericales"},
+  {common:"Persimmon",scientific:"Diospyros virginiana",family:"Ebenaceae",order:"Ericales"},
+  {common:"Thorny olive",scientific:"Elaeagnus pungens",family:"Elaeagnaceae",order:"Rosales"},
+  {common:"Autumn olive",scientific:"Elaeagnus umbellata",family:"Elaeagnaceae",order:"Rosales"},
+  {common:"Strawberry bush",scientific:"Euonymus americanus",family:"Celastraceae",order:"Celastrales"},
+  {common:"American beech",scientific:"Fagus grandifolia var. caroliniana",family:"Fagaceae",order:"Fagales"},
+  {common:"White ash",scientific:"Fraxinus americana",family:"Oleaceae",order:"Lamiales"},
+  {common:"Carolina ash",scientific:"Fraxinus caroliniana",family:"Oleaceae",order:"Lamiales"},
+  {common:"Green ash",scientific:"Fraxinus pennsylvanica",family:"Oleaceae",order:"Lamiales"},
+  {common:"Blue huckleberry",scientific:"Gaylussacia frondosa",family:"Ericaceae",order:"Ericales"},
+  {common:"Carolina jessamine",scientific:"Gelsemium sempervirens",family:"Gelsemiaceae",order:"Gentianales"},
+  {common:"Ginkgo",scientific:"Ginkgo biloba",family:"Ginkgoaceae",order:"Ginkgoales"},
+  {common:"Honey locust",scientific:"Gleditsia triacanthos",family:"Fabaceae",order:"Fabales"},
+  {common:"Kentucky coffeetree",scientific:"Gymnocladus dioicus",family:"Fabaceae",order:"Fabales"},
+  {common:"Witch hazel",scientific:"Hamamelis virginiana var. virginiana",family:"Hamamelidaceae",order:"Saxifragales"},
+  {common:"English ivy",scientific:"Hedera helix var. helix",family:"Araliaceae",order:"Apiales"},
+  {common:"Leyland cypress",scientific:"Hesperotropsis leylandii",family:"Cupressaceae",order:"Pinales"},
+  {common:"Oakleaf hydrangea",scientific:"Hydrangea quercifolia",family:"Hydrangeaceae",order:"Cornales"},
+  {common:"Possumhaw",scientific:"Ilex decidua",family:"Aquifoliaceae",order:"Aquifoliales"},
+  {common:"American holly",scientific:"Ilex opaca",family:"Aquifoliaceae",order:"Aquifoliales"},
+  {common:"Winterberry",scientific:"Ilex verticillata",family:"Aquifoliaceae",order:"Aquifoliales"},
+  {common:"Yaupon holly",scientific:"Ilex vomitoria",family:"Aquifoliaceae",order:"Aquifoliales"},
+  {common:"Virginia willow",scientific:"Itea virginica",family:"Iteaceae",order:"Saxifragales"},
+  {common:"Butternut",scientific:"Juglans cinerea",family:"Juglandaceae",order:"Fagales"},
+  {common:"Black walnut",scientific:"Juglans nigra",family:"Juglandaceae",order:"Fagales"},
+  {common:"Eastern redcedar",scientific:"Juniperus virginiana",family:"Cupressaceae",order:"Pinales"},
+  {common:"Mountain laurel",scientific:"Kalmia latifolia",family:"Ericaceae",order:"Ericales"},
+  {common:"Lespedeza bicolor",scientific:"Lespedeza bicolor",family:"Fabaceae",order:"Fabales"},
+  {common:"Sericea lespedeza",scientific:"Lespedeza cuneata",family:"Fabaceae",order:"Fabales"},
+  {common:"Drooping leucothoe",scientific:"Leucothoe fontanesiana",family:"Ericaceae",order:"Ericales"},
+  {common:"Glossy privet",scientific:"Ligustrum lucidum",family:"Oleaceae",order:"Lamiales"},
+  {common:"Chinese privet",scientific:"Ligustrum sinense",family:"Oleaceae",order:"Lamiales"},
+  {common:"Spicebush",scientific:"Lindera benzoin",family:"Lauraceae",order:"Laurales"},
+  {common:"Sweetgum",scientific:"Liquidambar styraciflua",family:"Altingiaceae",order:"Saxifragales"},
+  {common:"Tulip poplar",scientific:"Liriodendron tulipifera var. tulipifera",family:"Magnoliaceae",order:"Magnoliales"},
+  {common:"Japanese honeysuckle",scientific:"Lonicera japonica",family:"Caprifoliaceae",order:"Dipsacales"},
+  {common:"Osage orange",scientific:"Maclura pomifera",family:"Moraceae",order:"Rosales"},
+  {common:"Southern magnolia",scientific:"Magnolia grandiflora",family:"Magnoliaceae",order:"Magnoliales"},
+  {common:"Umbrella magnolia",scientific:"Magnolia tripetala",family:"Magnoliaceae",order:"Magnoliales"},
+  {common:"Sweetbay magnolia",scientific:"Magnolia virginiana var. virginiana",family:"Magnoliaceae",order:"Magnoliales"},
+  {common:"Chinaberry",scientific:"Melia azedarach",family:"Meliaceae",order:"Sapindales"},
+  {common:"Dawn redwood",scientific:"Metasequoia glyptostroboides",family:"Cupressaceae",order:"Pinales"},
+  {common:"Stiltgrass",scientific:"Microstegium vimineum",family:"Poaceae",order:"Poales"},
+  {common:"Wax myrtle",scientific:"Morella cerifera",family:"Myricaceae",order:"Fagales"},
+  {common:"White mulberry",scientific:"Morus alba",family:"Moraceae",order:"Rosales"},
+  {common:"Red mulberry",scientific:"Morus rubra",family:"Moraceae",order:"Rosales"},
+  {common:"Muscadine grape",scientific:"Muscadinia rotundifolia var. rotundifolia",family:"Vitaceae",order:"Vitales"},
+  {common:"Blackgum",scientific:"Nyssa sylvatica",family:"Nyssaceae",order:"Cornales"},
+  {common:"Eastern hophornbeam",scientific:"Ostrya virginiana",family:"Betulaceae",order:"Fagales"},
+  {common:"Sourwood",scientific:"Oxydendrum arboreum",family:"Ericaceae",order:"Ericales"},
+  {common:"Virginia creeper",scientific:"Parthenocissus quinquefolia",family:"Vitaceae",order:"Vitales"},
+  {common:"Paulownia/Princesstree",scientific:"Paulownia tomentosa",family:"Paulowniaceae",order:"Lamiales"},
+  {common:"Eastern mistletoe",scientific:"Phoradendron leucarpum",family:"Santalaceae",order:"Santalales"},
+  {common:"Golden bamboo",scientific:"Phyllostachys aurea",family:"Poaceae",order:"Poales"},
+  {common:"Norway spruce",scientific:"Picea abies",family:"Pinaceae",order:"Pinales"},
+  {common:"Engelmann spruce",scientific:"Picea engelmannii",family:"Pinaceae",order:"Pinales"},
+  {common:"Red spruce",scientific:"Picea rubens",family:"Pinaceae",order:"Pinales"},
+  {common:"Sitka spruce",scientific:"Picea sitchensis",family:"Pinaceae",order:"Pinales"},
+  {common:"Lodgepole pine",scientific:"Pinus contorta",family:"Pinaceae",order:"Pinales"},
+  {common:"Sand pine",scientific:"Pinus clausa",family:"Pinaceae",order:"Pinales"},
+  {common:"Shortleaf pine",scientific:"Pinus echinata",family:"Pinaceae",order:"Pinales"},
+  {common:"Pinyon pine",scientific:"Pinus edulis",family:"Pinaceae",order:"Pinales"},
+  {common:"Slash pine",scientific:"Pinus elliottii",family:"Pinaceae",order:"Pinales"},
+  {common:"Spruce pine",scientific:"Pinus glabra",family:"Pinaceae",order:"Pinales"},
+  {common:"Sugar pine",scientific:"Pinus lambertiana",family:"Pinaceae",order:"Pinales"},
+  {common:"Great Basin bristlecone pine",scientific:"Pinus longaeva",family:"Pinaceae",order:"Pinales"},
+  {common:"Western white pine",scientific:"Pinus monticola",family:"Pinaceae",order:"Pinales"},
+  {common:"Longleaf pine",scientific:"Pinus palustris",family:"Pinaceae",order:"Pinales"},
+  {common:"Ponderosa pine",scientific:"Pinus ponderosa",family:"Pinaceae",order:"Pinales"},
+  {common:"Table Mountain pine",scientific:"Pinus pungens",family:"Pinaceae",order:"Pinales"},
+  {common:"Pitch pine",scientific:"Pinus rigida",family:"Pinaceae",order:"Pinales"},
+  {common:"Pond pine",scientific:"Pinus serotina",family:"Pinaceae",order:"Pinales"},
+  {common:"Eastern white pine",scientific:"Pinus strobus",family:"Pinaceae",order:"Pinales"},
+  {common:"Loblolly pine",scientific:"Pinus taeda",family:"Pinaceae",order:"Pinales"},
+  {common:"Virginia pine",scientific:"Pinus virginiana",family:"Pinaceae",order:"Pinales"},
+  {common:"Chinese pistache",scientific:"Pistacia chinensis",family:"Anacardiaceae",order:"Sapindales"},
+  {common:"Sycamore",scientific:"Platanus occidentalis var. occidentalis",family:"Platanaceae",order:"Proteales"},
+  {common:"Eastern cottonwood",scientific:"Populus deltoides ssp. deltoides",family:"Salicaceae",order:"Malpighiales"},
+  {common:"Carolina cherry laurel",scientific:"Prunus caroliniana",family:"Rosaceae",order:"Rosales"},
+  {common:"Black cherry",scientific:"Prunus serotina var. serotina",family:"Rosaceae",order:"Rosales"},
+  {common:"Rocky Mountain Douglas-fir",scientific:"Pseudotsuga menziesii var. glauca",family:"Pinaceae",order:"Pinales"},
+  {common:"Coast Douglas-fir",scientific:"Pseudotsuga menziesii var. menziesii",family:"Pinaceae",order:"Pinales"},
+  {common:"Kudzu",scientific:"Pueraria montana var. lobata",family:"Fabaceae",order:"Fabales"},
+  {common:"Callery pear",scientific:"Pyrus calleryana",family:"Rosaceae",order:"Rosales"},
+  {common:"Sawtooth oak",scientific:"Quercus acutissima",family:"Fagaceae",order:"Fagales"},
+  {common:"White oak",scientific:"Quercus alba",family:"Fagaceae",order:"Fagales"},
+  {common:"Swamp white oak",scientific:"Quercus bicolor",family:"Fagaceae",order:"Fagales"},
+  {common:"Scarlet oak",scientific:"Quercus coccinea",family:"Fagaceae",order:"Fagales"},
+  {common:"Darlington oak",scientific:"Quercus hemisphaerica",family:"Fagaceae",order:"Fagales"},
+  {common:"Southern red oak",scientific:"Quercus falcata",family:"Fagaceae",order:"Fagales"},
+  {common:"Laurel oak",scientific:"Quercus laurifolia",family:"Fagaceae",order:"Fagales"},
+  {common:"Overcup oak",scientific:"Quercus lyrata",family:"Fagaceae",order:"Fagales"},
+  {common:"Blackjack oak",scientific:"Quercus marilandica var. marilandica",family:"Fagaceae",order:"Fagales"},
+  {common:"Swamp chestnut oak",scientific:"Quercus michauxii",family:"Fagaceae",order:"Fagales"},
+  {common:"Chestnut oak",scientific:"Quercus montana",family:"Fagaceae",order:"Fagales"},
+  {common:"Water oak",scientific:"Quercus nigra",family:"Fagaceae",order:"Fagales"},
+  {common:"Cherrybark oak",scientific:"Quercus pagoda",family:"Fagaceae",order:"Fagales"},
+  {common:"Pin oak",scientific:"Quercus palustris",family:"Fagaceae",order:"Fagales"},
+  {common:"Willow oak",scientific:"Quercus phellos",family:"Fagaceae",order:"Fagales"},
+  {common:"Northern red oak",scientific:"Quercus rubra var. rubra",family:"Fagaceae",order:"Fagales"},
+  {common:"Shumard oak",scientific:"Quercus shumardii",family:"Fagaceae",order:"Fagales"},
+  {common:"Post oak",scientific:"Quercus stellata",family:"Fagaceae",order:"Fagales"},
+  {common:"Texas red oak",scientific:"Quercus texana",family:"Fagaceae",order:"Fagales"},
+  {common:"Black oak",scientific:"Quercus velutina",family:"Fagaceae",order:"Fagales"},
+  {common:"Live oak",scientific:"Quercus virginiana",family:"Fagaceae",order:"Fagales"},
+  {common:"Rosebay rhododendron",scientific:"Rhododendron maximum",family:"Ericaceae",order:"Ericales"},
+  {common:"Winged sumac",scientific:"Rhus copallinum var. copallinum",family:"Anacardiaceae",order:"Sapindales"},
+  {common:"Black locust",scientific:"Robinia pseudoacacia",family:"Fabaceae",order:"Fabales"},
+  {common:"Multiflora rose",scientific:"Rosa multiflora",family:"Rosaceae",order:"Rosales"},
+  {common:"Blackberry/Raspberry",scientific:"Rubus spp.",family:"Rosaceae",order:"Rosales"},
+  {common:"Black willow",scientific:"Salix nigra",family:"Salicaceae",order:"Malpighiales"},
+  {common:"American elderberry",scientific:"Sambucus canadensis",family:"Adoxaceae",order:"Dipsacales"},
+  {common:"Sassafras",scientific:"Sassafras albidum",family:"Lauraceae",order:"Laurales"},
+  {common:"Coast redwood",scientific:"Sequoia sempervirens",family:"Cupressaceae",order:"Pinales"},
+  {common:"Giant sequoia",scientific:"Sequoiadendron giganteum",family:"Cupressaceae",order:"Pinales"},
+  {common:"Roundleaf greenbrier",scientific:"Smilax rotundifolia",family:"Smilacaceae",order:"Liliales"},
+  {common:"American bladdernut",scientific:"Staphylea trifolia",family:"Staphyleaceae",order:"Crossosomatales"},
+  {common:"Bigleaf snowbell",scientific:"Styrax grandifolius",family:"Styracaceae",order:"Ericales"},
+  {common:"Silky dogwood",scientific:"Swida amomum",family:"Cornaceae",order:"Cornales"},
+  {common:"Sweetleaf",scientific:"Symplocos tinctoria",family:"Symplocaceae",order:"Ericales"},
+  {common:"Pond cypress",scientific:"Taxodium ascendens",family:"Cupressaceae",order:"Pinales"},
+  {common:"Bald cypress",scientific:"Taxodium distichum",family:"Cupressaceae",order:"Pinales"},
+  {common:"Northern white cedar/Arborvitae",scientific:"Thuja occidentalis",family:"Cupressaceae",order:"Pinales"},
+  {common:"Poison ivy",scientific:"Toxicodendron radicans var. radicans",family:"Anacardiaceae",order:"Sapindales"},
+  {common:"Chinese tallow tree",scientific:"Triadica sebifera",family:"Euphorbiaceae",order:"Malpighiales"},
+  {common:"Eastern hemlock",scientific:"Tsuga canadensis",family:"Pinaceae",order:"Pinales"},
+  {common:"Carolina hemlock",scientific:"Tsuga caroliniana",family:"Pinaceae",order:"Pinales"},
+  {common:"Western hemlock",scientific:"Tsuga heterophylla",family:"Pinaceae",order:"Pinales"},
+  {common:"Winged elm",scientific:"Ulmus alata",family:"Ulmaceae",order:"Rosales"},
+  {common:"American elm",scientific:"Ulmus americana var. americana",family:"Ulmaceae",order:"Rosales"},
+  {common:"Chinese elm",scientific:"Ulmus parvifolia",family:"Ulmaceae",order:"Rosales"},
+  {common:"Slippery elm",scientific:"Ulmus rubra",family:"Ulmaceae",order:"Rosales"},
+  {common:"Farkleberry",scientific:"Vaccinium arboreum",family:"Ericaceae",order:"Ericales"},
+  {common:"Hillside blueberry",scientific:"Vaccinium pallidum",family:"Ericaceae",order:"Ericales"},
+  {common:"Mapleleaf viburnum",scientific:"Viburnum acerifolium",family:"Adoxaceae",order:"Dipsacales"},
+  {common:"Blackhaw",scientific:"Viburnum prunifolium",family:"Adoxaceae",order:"Dipsacales"},
+  {common:"Downy arrowwood",scientific:"Viburnum rafinesquianum",family:"Adoxaceae",order:"Dipsacales"},
+  {common:"Northern arrowwood",scientific:"Viburnum recognitum",family:"Adoxaceae",order:"Dipsacales"},
+  {common:"Rusty blackhaw",scientific:"Viburnum rufidulum",family:"Adoxaceae",order:"Dipsacales"},
+];
+
+// ── Storage ───────────────────────────────────────────────────────────────────
+const STORAGE_KEY = 'dendro_myspecies_v2';
+function loadMy() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e) { return []; } }
+function saveMy() { localStorage.setItem(STORAGE_KEY, JSON.stringify(mySpecies)); }
+let mySpecies = loadMy();
+
+// ── Photo cache ───────────────────────────────────────────────────────────────
+const photoCache = {};
+async function fetchTaxonPhoto(sci) {
+  const key = sci.split(' ').slice(0,2).join(' ');
+  if (photoCache[key]) return photoCache[key];
+  try {
+    const r = await fetch(`https://api.inaturalist.org/v1/taxa?q=${encodeURIComponent(key)}&rank=species&per_page=1`);
+    const d = await r.json();
+    const t = d.results && d.results[0];
+    if (t && t.default_photo && t.default_photo.medium_url) {
+      photoCache[key] = t.default_photo.medium_url; return t.default_photo.medium_url;
+    }
+  } catch(e) {}
+  return null;
+}
+
+// ── Panel helpers ─────────────────────────────────────────────────────────────
+function openPanel() {
+  document.getElementById('managePanel').classList.add('open');
+  renderMasterList();
+  renderMyList();
+  updateCounts();
+}
+function closePanel() {
+  document.getElementById('managePanel').classList.remove('open');
+  rebuildQuiz();
+}
+
+let activeTab = 'list';
+function switchTab(name, btn) {
+  activeTab = name;
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'mine') renderMyList();
+  if (name === 'list') renderMasterList();
+}
+
+function updateCounts() {
+  const n = mySpecies.length;
+  document.getElementById('myCount').textContent = n;
+  document.getElementById('myCountTab').textContent = n;
+  document.getElementById('footerCount').textContent = n;
+}
+
+function isAdded(sci) { return mySpecies.some(s => s.scientific === sci); }
+
+function addSpecies(sp) {
+  if (!isAdded(sp.scientific)) { mySpecies.push(sp); saveMy(); updateCounts(); }
+}
+function removeSpecies(sci) {
+  mySpecies = mySpecies.filter(s => s.scientific !== sci); saveMy(); updateCounts();
+}
+
+// ── Master list tab ───────────────────────────────────────────────────────────
+let visibleItems = [...MASTER];
+
+function filterMasterList() {
+  const q = document.getElementById('listSearch').value.toLowerCase().trim();
+  visibleItems = q ? MASTER.filter(s =>
+    s.common.toLowerCase().includes(q) ||
+    s.scientific.toLowerCase().includes(q) ||
+    s.family.toLowerCase().includes(q) ||
+    s.order.toLowerCase().includes(q)
+  ) : [...MASTER];
+  renderMasterList();
+}
+
+function renderMasterList() {
+  const container = document.getElementById('masterList');
+  const q = (document.getElementById('listSearch').value || '').toLowerCase().trim();
+  visibleItems = q ? MASTER.filter(s =>
+    s.common.toLowerCase().includes(q) ||
+    s.scientific.toLowerCase().includes(q) ||
+    s.family.toLowerCase().includes(q) ||
+    s.order.toLowerCase().includes(q)
+  ) : [...MASTER];
+
+  document.getElementById('listMatchCount').textContent =
+    visibleItems.length === MASTER.length ? `${MASTER.length} species` : `${visibleItems.length} of ${MASTER.length} species`;
+
+  container.innerHTML = visibleItems.map(s => `
+    <label class="master-item">
+      <input type="checkbox" ${isAdded(s.scientific) ? 'checked' : ''}
+        onchange="toggleMaster(this, '${s.scientific.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')">
+      <div class="mi-text">
+        <div class="mi-common">${s.common}</div>
+        <div class="mi-sci">${s.scientific}</div>
+        <div class="mi-tags">
+          ${s.family ? `<span class="tag">${s.family}</span>` : ''}
+          ${s.order ? `<span class="tag">${s.order}</span>` : ''}
+        </div>
+      </div>
+    </label>`).join('');
+}
+
+function toggleMaster(cb, sci) {
+  const sp = MASTER.find(s => s.scientific === sci);
+  if (!sp) return;
+  if (cb.checked) addSpecies(sp);
+  else removeSpecies(sci);
+  updateCounts();
+}
+
+function toggleSelectVisible() {
+  const allChecked = visibleItems.every(s => isAdded(s.scientific));
+  if (allChecked) visibleItems.forEach(s => removeSpecies(s.scientific));
+  else visibleItems.forEach(s => addSpecies(s));
+  renderMasterList();
+  updateCounts();
+}
+
+// ── iNaturalist tab ───────────────────────────────────────────────────────────
+async function doInatSearch() {
+  const q = document.getElementById('inatSearch').value.trim();
+  if (!q) return;
+  const btn = document.getElementById('inatBtn');
+  const status = document.getElementById('inatStatus');
+  const results = document.getElementById('inatResults');
+  btn.disabled = true; btn.textContent = 'Searching…';
+  status.style.display = 'none'; results.style.display = 'none'; results.innerHTML = '';
+  try {
+    const r = await fetch(`https://api.inaturalist.org/v1/taxa?q=${encodeURIComponent(q)}&rank=species&per_page=8&iconic_taxa=Plantae`);
+    const d = await r.json();
+    btn.disabled = false; btn.textContent = 'Search';
+    const taxa = d.results || [];
+    if (!taxa.length) { status.textContent = 'No results found.'; status.style.display='block'; return; }
+    taxa.forEach(taxon => {
+      const sci = taxon.name;
+      const common = taxon.preferred_common_name
+        ? taxon.preferred_common_name.replace(/\b\w/g, c => c.toUpperCase()) : '';
+      if (taxon.default_photo) photoCache[sci.split(' ').slice(0,2).join(' ')] = taxon.default_photo.medium_url;
+      const already = isAdded(sci);
+      const div = document.createElement('div');
+      div.className = 'inat-item';
+      div.innerHTML = `
+        <div class="inat-info">
+          <div class="inat-common">${common || sci}</div>
+          <div class="inat-sci">${sci}</div>
+          <div class="inat-meta">Rank: ${taxon.rank} · iNaturalist ID: ${taxon.id}</div>
+        </div>
+        <button class="inat-add ${already?'added':''}" id="iadd-${taxon.id}"
+          onclick="inatAdd(this,${taxon.id},'${sci.replace(/'/g,"\\'")}','${common.replace(/'/g,"\\'")}')">
+          ${already ? '✓ Added' : '+ Add'}
+        </button>`;
+      results.appendChild(div);
+    });
+    results.style.display = 'block';
+  } catch(e) {
+    btn.disabled=false; btn.textContent='Search';
+    status.textContent='Search failed. Check your connection.'; status.style.display='block';
+  }
+}
+
+async function inatAdd(btn, inatId, scientific, common) {
+  if (btn.classList.contains('added')) return;
+  btn.textContent = '…'; btn.disabled = true;
+  try {
+    const r = await fetch(`https://api.inaturalist.org/v1/taxa/${inatId}`);
+    const d = await r.json();
+    const taxon = d.results && d.results[0];
+    let family = '', order = '';
+    if (taxon && taxon.ancestors) {
+      for (const a of taxon.ancestors) {
+        if (a.rank === 'family') family = a.name;
+        if (a.rank === 'order') order = a.name;
+      }
+    }
+    addSpecies({ common, scientific, family, order });
+    btn.textContent = '✓ Added'; btn.classList.add('added'); btn.disabled = false;
+    updateCounts();
+  } catch(e) {
+    btn.textContent = '+ Add'; btn.disabled = false;
+  }
+}
+
+// ── My species tab ────────────────────────────────────────────────────────────
+function renderMyList() {
+  const list = document.getElementById('myList');
+  if (!mySpecies.length) {
+    list.innerHTML = '<div class="no-items">No species added yet</div>';
+    return;
+  }
+  list.innerHTML = mySpecies.map(s => `
+    <div class="my-item">
+      <div style="flex:1;min-width:0">
+        <div class="my-common">${s.common || s.scientific}</div>
+        <div class="my-sci">${s.scientific}</div>
+        <div class="my-tags">
+          ${s.family?`<span class="tag">${s.family}</span>`:''}
+          ${s.order?`<span class="tag">${s.order}</span>`:''}
+        </div>
+      </div>
+      <button class="remove-btn" onclick="removeMy('${s.scientific.replace(/'/g,"\\'")}')">×</button>
+    </div>`).join('');
+}
+function removeMy(sci) {
+  removeSpecies(sci); renderMyList(); updateCounts();
+  if (activeTab === 'list') renderMasterList();
+}
+
+// ── Quiz engine ───────────────────────────────────────────────────────────────
+let queue=[], current=0, score=0, total=0, streak=0, answered=false, hintStage=0;
+let activeOrders=new Set(), missedAnimals=[], quizStartTime=null, loadingToken=0;
+
+function getOrders() { return [...new Set(mySpecies.map(m=>m.order).filter(Boolean))].sort(); }
+
+function rebuildQuiz() {
+  if (!mySpecies.length) {
+    document.getElementById('quizContent').style.display='none';
+    document.getElementById('emptyState').style.display='block';
+    document.getElementById('filterBar').innerHTML='';
+    return;
+  }
+  document.getElementById('quizContent').style.display='block';
+  document.getElementById('emptyState').style.display='none';
+  activeOrders = new Set(getOrders());
+  buildFilterBar();
+  rebuildQueue();
+}
+
+function buildFilterBar() {
+  const orders = getOrders();
+  const bar = document.getElementById('filterBar');
+  bar.innerHTML = '';
+  if (orders.length < 2) return;
+  const allBtn = document.createElement('button');
+  allBtn.className='filter-btn'+(activeOrders.size===orders.length?' active':'');
+  allBtn.textContent='All orders';
+  allBtn.onclick=()=>{ activeOrders=new Set(getOrders()); rebuildQueue(); renderFilters(); };
+  bar.appendChild(allBtn);
+  orders.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='filter-btn'+(activeOrders.has(o)?' active':'');
+    b.textContent=o;
+    b.onclick=()=>{ if(activeOrders.has(o)&&activeOrders.size>1)activeOrders.delete(o); else activeOrders.add(o); rebuildQueue(); renderFilters(); };
+    bar.appendChild(b);
+  });
+}
+function renderFilters(){
+  const orders=getOrders(), btns=document.querySelectorAll('.filter-btn');
+  if(!btns.length) return;
+  btns[0].className='filter-btn'+(activeOrders.size===orders.length?' active':'');
+  orders.forEach((o,i)=>{ btns[i+1].className='filter-btn'+(activeOrders.has(o)?' active':''); });
+}
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+function rebuildQueue(){
+  const f=mySpecies.filter(m=>!m.order||activeOrders.has(m.order));
+  queue=shuffle([...f]); current=0;score=0;total=0;streak=0;hintStage=0;missedAnimals=[];quizStartTime=Date.now();
+  updateScorebar(); loadAnimal();
+}
+
+async function loadAnimal(){
+  if(current>=queue.length){showEndModal();return;}
+  answered=false; hintStage=0;
+  const m=queue[current], token=++loadingToken;
+  const img=document.getElementById('animalImg'),noImg=document.getElementById('noImg'),
+    loadMsg=document.getElementById('imgLoadingMsg'),credit=document.getElementById('inatCredit');
+  img.style.display='none'; noImg.style.display='none'; credit.style.display='none';
+  loadMsg.style.display='flex'; loadMsg.textContent='Loading photo…';
+  ['fCommon','fScientific','fFamily'].forEach(id=>{
+    const el=document.getElementById(id); el.value=''; el.className=''; el.disabled=false;
+  });
+  document.getElementById('feedbackBox').innerHTML='';
+  document.getElementById('submitBtn').disabled=false;
+  document.getElementById('hintBtn').disabled=false;
+  updateScorebar();
+  document.getElementById('qNum').textContent=current+1;
+  document.getElementById('qTotal').textContent=queue.length;
+  document.getElementById('progressFill').style.width=((current/queue.length)*100)+'%';
+  document.getElementById('fCommon').focus();
+  const photoUrl=await fetchTaxonPhoto(m.scientific);
+  if(token!==loadingToken) return;
+  loadMsg.style.display='none';
+  if(photoUrl){
+    img.style.display='block'; img.classList.add('loading');
+    img.onload=()=>{img.classList.remove('loading'); credit.style.display='block';};
+    img.onerror=()=>{img.style.display='none'; noImg.style.display='flex'; credit.style.display='none';};
+    img.src=photoUrl; img.alt='Identify this plant: '+m.common;
+  } else { noImg.style.display='flex'; }
+}
+
+function normalize(s){return s.trim().toLowerCase().replace(/\s+/g,' ').replace(/[()]/g,'').replace(/\bor\b.*$/,'').trim();}
+function checkAnswer(){
+  if(answered) return; answered=true;
+  const m=queue[current];
+  const fields=[
+    {id:'fCommon',key:'common',label:'Common name'},
+    {id:'fScientific',key:'scientific',label:'Scientific name'},
+    {id:'fFamily',key:'family',label:'Family'}
+  ];
+  let correct=0, html='';
+  fields.forEach(f=>{
+    const el=document.getElementById(f.id);
+    const val=normalize(el.value), ans=normalize(m[f.key]||'');
+    const ok=val===ans;
+    el.className=ok?'correct':'incorrect'; el.disabled=true;
+    if(!ok) html+=`<div class="feedback-row"><span class="icon">✗</span>${f.label}: <span class="answer">${m[f.key]||'—'}</span></div>`;
+    else correct++;
+  });
+  total++;
+  if(correct===3){score++;streak++;}else{streak=0;missedAnimals.push(m);}
+  updateScorebar();
+  const box=document.getElementById('feedbackBox');
+  if(correct===3){
+    box.innerHTML='<div class="feedback correct-all"><div class="feedback-row"><span class="icon">✓</span>All correct! Next question in a moment…</div></div>';
+    setTimeout(nextAnimal,1800);
+  } else {
+    box.innerHTML=`<div class="feedback ${correct>=2?'partial':'wrong'}">${html}</div>`;
+    document.getElementById('submitBtn').disabled=true;
+  }
+}
+function nextAnimal(){current++;loadAnimal();}
+function showHint(){
+  const m=queue[current];
+  const hints=['Family: '+(m.family||'unknown'),'Genus: '+m.scientific.split(' ')[0],'Common name starts with: "'+m.common[0].toUpperCase()+'…"'];
+  hintStage=hintStage%hints.length;
+  document.getElementById('feedbackBox').innerHTML=`<div class="feedback partial"><div class="feedback-row"><span class="icon">i</span>Hint ${hintStage+1}/3: ${hints[hintStage]}</div></div>`;
+  hintStage++;
+}
+function updateScorebar(){
+  document.getElementById('scoreDisplay').textContent=score;
+  document.getElementById('totalDisplay').textContent=total;
+  document.getElementById('streak').textContent=streak;
+}
+function showEndModal(){
+  const pct=total>0?Math.round((score/total)*100):0;
+  document.getElementById('finalScore').textContent=score+'/'+total+' ('+pct+'%)';
+  const elapsed=Math.floor((Date.now()-quizStartTime)/1000);
+  document.getElementById('finalTime').textContent='⏱ '+(Math.floor(elapsed/60)>0?Math.floor(elapsed/60)+'m ':'')+(elapsed%60)+'s';
+  document.getElementById('finalMsg').textContent=pct>=90?'Outstanding! You really know your dendrology.':pct>=70?'Great work — solid tree knowledge!':pct>=50?'Good effort. Keep studying and try again!':'Keep at it — review your species list and try again!';
+  const retryBtn=document.getElementById('retryBtn');
+  retryBtn.style.display=missedAnimals.length>0?'block':'none';
+  if(missedAnimals.length) retryBtn.textContent='Retry '+missedAnimals.length+' missed question'+(missedAnimals.length===1?'':'s');
+  document.getElementById('endModal').classList.add('open');
+}
+function retryMissed(){
+  document.getElementById('endModal').classList.remove('open');
+  queue=shuffle([...missedAnimals]); missedAnimals=[];
+  current=0;score=0;total=0;streak=0;hintStage=0;quizStartTime=Date.now();
+  updateScorebar(); loadAnimal();
+}
+function restartQuiz(){
+  document.getElementById('endModal').classList.remove('open');
+  rebuildQueue();
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&document.activeElement.tagName==='INPUT'&&!answered){
+    if(document.getElementById('managePanel').classList.contains('open')){
+      if(document.activeElement.id==='inatSearch') doInatSearch();
+    } else { checkAnswer(); }
+  }
+});
+
+rebuildQuiz();
+</script>
+</body>
+</html>
