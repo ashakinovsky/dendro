@@ -31,12 +31,39 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--bg3);color:var(--te
 .header p{font-size:14px;color:var(--text2);margin-top:4px}
 .manage-btn{position:absolute;top:0;right:0;padding:6px 12px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg);color:var(--text2);font-size:12px;font-family:'Source Sans 3',sans-serif;font-weight:600;cursor:pointer;transition:background 0.15s}
 .manage-btn:hover{background:var(--bg2)}
+.nh-toggle-wrap{position:absolute;top:0;left:0;display:flex;align-items:center;gap:6px}
+.nh-toggle-label{font-size:11px;color:var(--text3);font-weight:600}
+.nh-switch{position:relative;width:34px;height:19px;border-radius:10px;background:var(--bg2);border:0.5px solid var(--border2);cursor:pointer;transition:background 0.2s;flex-shrink:0}
+.nh-switch.on{background:var(--green)}
+.nh-switch .knob{position:absolute;top:1.5px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.3);transition:left 0.2s}
+.nh-switch.on .knob{left:17px}
+.nh-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;margin-top:14px}
+.nh-label{font-size:11px;font-weight:600;color:var(--green-dark);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+.nh-question{font-size:14px;color:var(--text);line-height:1.5;margin-bottom:10px}
+.nh-input{width:100%;border:0.5px solid var(--border2);border-radius:var(--radius);padding:8px 10px;font-size:14px;font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--text);outline:none;margin-bottom:10px;resize:vertical;min-height:38px}
+.nh-input:focus{border-color:var(--green);box-shadow:0 0 0 2px rgba(29,158,117,0.15)}
+.nh-actions{display:flex;gap:8px}
+.nh-answer-box{background:var(--green-light);border:0.5px solid #5DCAA5;border-radius:var(--radius);padding:10px 14px;margin-bottom:10px;font-size:13px;color:var(--green-dark);line-height:1.5}
+.nh-answer-box strong{display:block;margin-bottom:2px;font-size:11px;text-transform:uppercase;letter-spacing:0.4px}
+.nh-self-grade{display:flex;gap:8px;margin-bottom:10px}
+.nh-grade-btn{flex:1;padding:7px 10px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg);font-size:13px;font-family:'Source Sans 3',sans-serif;font-weight:600;cursor:pointer;color:var(--text2)}
+.nh-grade-btn.right{border-color:var(--green-dark)}
+.nh-grade-btn.right.selected{background:var(--green);color:#fff;border-color:var(--green-dark)}
+.nh-grade-btn.wrong{border-color:#F09595}
+.nh-grade-btn.wrong.selected{background:var(--red);color:#fff;border-color:var(--red)}
+.nh-graded-msg{font-size:12px;color:var(--text3);margin-bottom:10px}
 .scorebar{display:flex;gap:8px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
 .score-pill{background:var(--bg2);border:0.5px solid var(--border);border-radius:20px;padding:5px 14px;font-size:13px;color:var(--text2)}
 .score-pill span{font-weight:600;color:var(--text)}
 .progress-bar{height:3px;background:var(--bg2);border-radius:2px;margin-bottom:18px;overflow:hidden}
 .progress-fill{height:100%;background:var(--green);border-radius:2px;transition:width 0.4s ease}
-.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.filter-section{margin-bottom:14px}
+.filter-toggle{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--text2);font-weight:600;padding:4px 0;user-select:none}
+.filter-toggle .arrow{display:inline-block;transition:transform 0.2s ease;font-size:10px;color:var(--text3)}
+.filter-toggle.open .arrow{transform:rotate(90deg)}
+.filter-toggle .filter-summary{color:var(--text3);font-weight:400}
+.filter-bar{display:none;gap:6px;flex-wrap:wrap;margin-top:8px}
+.filter-bar.open{display:flex}
 .filter-btn{font-size:11px;padding:4px 10px;border-radius:12px;border:0.5px solid var(--border2);background:var(--bg);color:var(--text2);cursor:pointer;font-family:'Source Sans 3',sans-serif;transition:all 0.15s}
 .filter-btn.active{background:var(--green);border-color:var(--green-dark);color:#fff;font-weight:600}
 .img-wrap{width:100%;aspect-ratio:16/9;background:var(--bg2);border-radius:var(--radius-lg);overflow:hidden;border:0.5px solid var(--border);margin-bottom:16px;position:relative}
@@ -153,6 +180,10 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--bg3);color:var(--te
 <body>
 <div id="app">
   <div class="header">
+    <div class="nh-toggle-wrap">
+      <div class="nh-switch" id="nhSwitch" onclick="toggleNatHist()"><div class="knob"></div></div>
+      <span class="nh-toggle-label">Nat. history</span>
+    </div>
     <button class="manage-btn" onclick="openPanel()">⊕ Manage species</button>
     <h1>Dendrology Quiz</h1>
     <p>Enter the common name, scientific name, and family for each specimen</p>
@@ -163,9 +194,17 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--bg3);color:var(--te
       <div class="score-pill">Score <span id="scoreDisplay">0</span>/<span id="totalDisplay">0</span></div>
       <div class="score-pill">Question <span id="qNum">1</span>/<span id="qTotal">—</span></div>
       <div class="score-pill">Streak <span id="streak">0</span></div>
+      <div class="score-pill" id="nhScorePill" style="display:none">Nat. history <span id="nhScoreDisplay">0</span>/<span id="nhTotalDisplay">0</span></div>
     </div>
     <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-    <div class="filter-bar" id="filterBar"></div>
+    <div class="filter-section">
+      <div class="filter-toggle" id="filterToggle" onclick="toggleFilterSection()">
+        <span class="arrow">▶</span>
+        <span>Filter by order</span>
+        <span class="filter-summary" id="filterSummary"></span>
+      </div>
+      <div class="filter-bar" id="filterBar"></div>
+    </div>
     <div class="img-wrap" id="imgWrap">
       <div class="img-loading-msg" id="imgLoadingMsg">Loading photo…</div>
       <img id="animalImg" src="" alt="Plant to identify" style="display:none">
@@ -183,6 +222,7 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--bg3);color:var(--te
       <button class="btn" id="skipBtn" onclick="nextAnimal()">Skip →</button>
     </div>
     <div id="feedbackBox"></div>
+    <div id="nhCard"></div>
     <div class="mode-info">Press <strong>Enter</strong> to submit · <strong>Tab</strong> to move between fields</div>
   </div>
 
@@ -263,15 +303,15 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--bg3);color:var(--te
 const MASTER = [
   {common:"Fraser fir",scientific:"Abies fraseri",family:"Pinaceae",order:"Pinales"},
   {common:"Southern sugar maple",scientific:"Acer floridanum",family:"Sapindaceae",order:"Sapindales"},
-  {common:"Boxelder",scientific:"Acer negundo",family:"Sapindaceae",order:"Sapindales"},
+  {common:"Boxelder",scientific:"Acer negundo var. negundo",family:"Sapindaceae",order:"Sapindales"},
   {common:"Japanese maple",scientific:"Acer palmatum",family:"Sapindaceae",order:"Sapindales"},
   {common:"Red maple",scientific:"Acer rubrum var. rubrum",family:"Sapindaceae",order:"Sapindales"},
   {common:"Silver maple",scientific:"Acer saccharinum",family:"Sapindaceae",order:"Sapindales"},
-  {common:"Painted buckeye",scientific:"Aesculus sylvatica",family:"Sapindaceae",order:"Sapindales"},
+  {common:"Buckeye",scientific:"Aesculus spp.",family:"Sapindaceae",order:"Sapindales"},
   {common:"Tree-of-heaven",scientific:"Ailanthus altissima",family:"Simaroubaceae",order:"Sapindales"},
-  {common:"Mimosa",scientific:"Albizia julibrissin",family:"Fabaceae",order:"Fabales"},
+  {common:"Mimosa/Silk tree",scientific:"Albizia julibrissin",family:"Fabaceae",order:"Fabales"},
   {common:"Hazel alder",scientific:"Alnus serrulata",family:"Betulaceae",order:"Fagales"},
-  {common:"Serviceberry",scientific:"Amelanchier arborea",family:"Rosaceae",order:"Rosales"},
+  {common:"Serviceberry",scientific:"Amelanchier spp.",family:"Rosaceae",order:"Rosales"},
   {common:"Heartleaf peppervine",scientific:"Ampelopsis glandulosa",family:"Vitaceae",order:"Vitales"},
   {common:"Devil's walking stick",scientific:"Aralia spinosa",family:"Araliaceae",order:"Apiales"},
   {common:"Pawpaw",scientific:"Asimina triloba",family:"Annonaceae",order:"Magnoliales"},
@@ -282,7 +322,7 @@ const MASTER = [
   {common:"American beautyberry",scientific:"Callicarpa americana",family:"Lamiaceae",order:"Lamiales"},
   {common:"Carolina allspice",scientific:"Calycanthus floridus",family:"Calycanthaceae",order:"Laurales"},
   {common:"Trumpet creeper",scientific:"Campsis radicans",family:"Bignoniaceae",order:"Lamiales"},
-  {common:"Musclewood",scientific:"Carpinus caroliniana",family:"Betulaceae",order:"Fagales"},
+  {common:"American hornbeam",scientific:"Carpinus caroliniana var. virginiana",family:"Betulaceae",order:"Fagales"},
   {common:"Bitternut hickory",scientific:"Carya cordiformis",family:"Juglandaceae",order:"Fagales"},
   {common:"Pignut hickory",scientific:"Carya glabra",family:"Juglandaceae",order:"Fagales"},
   {common:"Pecan",scientific:"Carya illinoinensis",family:"Juglandaceae",order:"Fagales"},
@@ -304,14 +344,40 @@ const MASTER = [
   {common:"Yellowwood",scientific:"Cladrastis kentukea",family:"Fabaceae",order:"Fabales"},
   {common:"Sweet pepperbush",scientific:"Clethra alnifolia",family:"Clethraceae",order:"Ericales"},
   {common:"American hazelnut",scientific:"Corylus americana",family:"Betulaceae",order:"Fagales"},
-  {common:"Hawthorn",scientific:"Crataegus phaenopyrum",family:"Rosaceae",order:"Rosales"},
-  {common:"Swamp cyrilla",scientific:"Cyrilla racemiflora",family:"Cyrillaceae",order:"Ericales"},
+  {common:"Hawthorn",scientific:"Crataegus spp.",family:"Rosaceae",order:"Rosales"},
+  {common:"Titi/Swamp cyrilla",scientific:"Cyrilla racemiflora",family:"Cyrillaceae",order:"Ericales"},
   {common:"Persimmon",scientific:"Diospyros virginiana",family:"Ebenaceae",order:"Ericales"},
   {common:"Thorny olive",scientific:"Elaeagnus pungens",family:"Elaeagnaceae",order:"Rosales"},
   {common:"Autumn olive",scientific:"Elaeagnus umbellata",family:"Elaeagnaceae",order:"Rosales"},
   {common:"Strawberry bush",scientific:"Euonymus americanus",family:"Celastraceae",order:"Celastrales"},
-  {common:"American beech",scientific:"Fagus grandifolia",family:"Fagaceae",order:"Fagales"},
-  {common:"White ash",scientific:"Fraxinus americana",family:"Oleaceae",order:"Lamiales"},
+  {common:"American beech",scientific:"Fagus grandifolia var. caroliniana",family:"Fagaceae",order:"Fagales",natHist:{
+    epithet:"\"Grandifolia\" means \"large-leaved\" (grandis = large, folium = leaf)",
+    familyCommon:"Beech family",
+    wildlifeUse:"Beechnuts are an important mast food source for birds, bears, deer, squirrels, and other mammals",
+    humanUse:"Wood used for flooring, tool handles, containers, and fuel; nuts historically used as food by Native Americans",
+    medicinalUse:"Native Americans used beech bark/leaves in folk remedies, though it is not a major modern medicinal species",
+    native:"Native",
+    seedDispersal:"Gravity and animals (especially squirrels, which cache and forget many nuts)",
+    fruitType:"Nut (beechnut), enclosed in a spiny husk",
+    monoeciousDioecious:"Monoecious",
+    floweringSeason:"Spring, around the same time leaves emerge",
+    woodUse:"Flooring, furniture, tool handles, and fuelwood; not commonly used by fine woodworkers due to warping",
+    invasivePest:"Beech bark disease (beech scale insect + Neonectria fungus)"
+  }},
+  {common:"White ash",scientific:"Fraxinus americana",family:"Oleaceae",order:"Lamiales",natHist:{
+    epithet:"\"Americana\" simply means \"of America\"",
+    familyCommon:"Olive family",
+    wildlifeUse:"Seeds (samaras) eaten by birds like finches and cardinals; cavities in older trees used by woodpeckers and owls",
+    humanUse:"Historically used for baseball bats, tool handles, oars, and furniture due to strength and flexibility",
+    medicinalUse:"Bark has been used in folk medicine as a tonic/astringent, though not a major modern medicinal species",
+    native:"Native",
+    seedDispersal:"Wind (samaras spin like helicopters)",
+    fruitType:"Samara (single-winged)",
+    monoeciousDioecious:"Dioecious",
+    floweringSeason:"Early spring, before leaves emerge",
+    woodUse:"Baseball bats, tool handles, hockey sticks, furniture, and flooring",
+    invasivePest:"Emerald ash borer"
+  }},
   {common:"Carolina ash",scientific:"Fraxinus caroliniana",family:"Oleaceae",order:"Lamiales"},
   {common:"Green ash",scientific:"Fraxinus pennsylvanica",family:"Oleaceae",order:"Lamiales"},
   {common:"Blue huckleberry",scientific:"Gaylussacia frondosa",family:"Ericaceae",order:"Ericales"},
@@ -319,8 +385,8 @@ const MASTER = [
   {common:"Ginkgo",scientific:"Ginkgo biloba",family:"Ginkgoaceae",order:"Ginkgoales"},
   {common:"Honey locust",scientific:"Gleditsia triacanthos",family:"Fabaceae",order:"Fabales"},
   {common:"Kentucky coffeetree",scientific:"Gymnocladus dioicus",family:"Fabaceae",order:"Fabales"},
-  {common:"Witch hazel",scientific:"Hamamelis virginiana",family:"Hamamelidaceae",order:"Saxifragales"},
-  {common:"English ivy",scientific:"Hedera helix",family:"Araliaceae",order:"Apiales"},
+  {common:"Witch hazel",scientific:"Hamamelis virginiana var. virginiana",family:"Hamamelidaceae",order:"Saxifragales"},
+  {common:"English ivy",scientific:"Hedera helix var. helix",family:"Araliaceae",order:"Apiales"},
   {common:"Leyland cypress",scientific:"Hesperotropsis leylandii",family:"Cupressaceae",order:"Pinales"},
   {common:"Oakleaf hydrangea",scientific:"Hydrangea quercifolia",family:"Hydrangeaceae",order:"Cornales"},
   {common:"Possumhaw",scientific:"Ilex decidua",family:"Aquifoliaceae",order:"Aquifoliales"},
@@ -344,14 +410,14 @@ const MASTER = [
   {common:"Osage orange",scientific:"Maclura pomifera",family:"Moraceae",order:"Rosales"},
   {common:"Southern magnolia",scientific:"Magnolia grandiflora",family:"Magnoliaceae",order:"Magnoliales"},
   {common:"Umbrella magnolia",scientific:"Magnolia tripetala",family:"Magnoliaceae",order:"Magnoliales"},
-  {common:"Sweetbay magnolia",scientific:"Magnolia virginiana",family:"Magnoliaceae",order:"Magnoliales"},
+  {common:"Sweetbay magnolia",scientific:"Magnolia virginiana var. virginiana",family:"Magnoliaceae",order:"Magnoliales"},
   {common:"Chinaberry",scientific:"Melia azedarach",family:"Meliaceae",order:"Sapindales"},
   {common:"Dawn redwood",scientific:"Metasequoia glyptostroboides",family:"Cupressaceae",order:"Pinales"},
   {common:"Stiltgrass",scientific:"Microstegium vimineum",family:"Poaceae",order:"Poales"},
   {common:"Wax myrtle",scientific:"Morella cerifera",family:"Myricaceae",order:"Fagales"},
   {common:"White mulberry",scientific:"Morus alba",family:"Moraceae",order:"Rosales"},
   {common:"Red mulberry",scientific:"Morus rubra",family:"Moraceae",order:"Rosales"},
-  {common:"Muscadine grape",scientific:"Muscadinia rotundifolia",family:"Vitaceae",order:"Vitales"},
+  {common:"Muscadine grape",scientific:"Muscadinia rotundifolia var. rotundifolia",family:"Vitaceae",order:"Vitales"},
   {common:"Blackgum",scientific:"Nyssa sylvatica",family:"Nyssaceae",order:"Cornales"},
   {common:"Eastern hophornbeam",scientific:"Ostrya virginiana",family:"Betulaceae",order:"Fagales"},
   {common:"Sourwood",scientific:"Oxydendrum arboreum",family:"Ericaceae",order:"Ericales"},
@@ -381,23 +447,36 @@ const MASTER = [
   {common:"Loblolly pine",scientific:"Pinus taeda",family:"Pinaceae",order:"Pinales"},
   {common:"Virginia pine",scientific:"Pinus virginiana",family:"Pinaceae",order:"Pinales"},
   {common:"Chinese pistache",scientific:"Pistacia chinensis",family:"Anacardiaceae",order:"Sapindales"},
-  {common:"Sycamore",scientific:"Platanus occidentalis",family:"Platanaceae",order:"Proteales"},
+  {common:"Sycamore",scientific:"Platanus occidentalis var. occidentalis",family:"Platanaceae",order:"Proteales"},
   {common:"Eastern cottonwood",scientific:"Populus deltoides ssp. deltoides",family:"Salicaceae",order:"Malpighiales"},
   {common:"Carolina cherry laurel",scientific:"Prunus caroliniana",family:"Rosaceae",order:"Rosales"},
-  {common:"Black cherry",scientific:"Prunus serotina",family:"Rosaceae",order:"Rosales"},
+  {common:"Black cherry",scientific:"Prunus serotina var. serotina",family:"Rosaceae",order:"Rosales"},
   {common:"Rocky Mountain Douglas-fir",scientific:"Pseudotsuga menziesii var. glauca",family:"Pinaceae",order:"Pinales"},
   {common:"Coast Douglas-fir",scientific:"Pseudotsuga menziesii var. menziesii",family:"Pinaceae",order:"Pinales"},
-  {common:"Kudzu",scientific:"Pueraria montana",family:"Fabaceae",order:"Fabales"},
+  {common:"Kudzu",scientific:"Pueraria montana var. lobata",family:"Fabaceae",order:"Fabales"},
   {common:"Callery pear",scientific:"Pyrus calleryana",family:"Rosaceae",order:"Rosales"},
   {common:"Sawtooth oak",scientific:"Quercus acutissima",family:"Fagaceae",order:"Fagales"},
-  {common:"White oak",scientific:"Quercus alba",family:"Fagaceae",order:"Fagales"},
+  {common:"White oak",scientific:"Quercus alba",family:"Fagaceae",order:"Fagales",natHist:{
+    epithet:"\"Alba\" means \"white,\" referring to the light ash-gray bark color (the common name actually refers to the pale finished wood color)",
+    familyCommon:"Beech family",
+    wildlifeUse:"Acorns are a critical food source for deer, squirrels, turkeys, and many other species; the tree supports huge numbers of insects, providing food for birds",
+    humanUse:"Iconic American hardwood used in shipbuilding, furniture, and barrel/cask making (notably for aging whiskey and wine)",
+    medicinalUse:"Bark has astringent properties and was historically used to treat diarrhea",
+    native:"Native",
+    seedDispersal:"Animals, especially scatter-hoarding by squirrels, which bury and forget many acorns",
+    fruitType:"Nut (acorn), matures in a single season (white oak group)",
+    monoeciousDioecious:"Monoecious",
+    floweringSeason:"Spring, with leaf emergence",
+    woodUse:"Furniture, flooring, shipbuilding, and whiskey/wine barrels — prized for strength and rot resistance",
+    invasivePest:"None of the listed pests/diseases (not significantly threatened by beech bark disease, EAB, laurel wilt, DED, or thousand cankers)"
+  }},
   {common:"Swamp white oak",scientific:"Quercus bicolor",family:"Fagaceae",order:"Fagales"},
   {common:"Scarlet oak",scientific:"Quercus coccinea",family:"Fagaceae",order:"Fagales"},
   {common:"Darlington oak",scientific:"Quercus hemisphaerica",family:"Fagaceae",order:"Fagales"},
   {common:"Southern red oak",scientific:"Quercus falcata",family:"Fagaceae",order:"Fagales"},
   {common:"Laurel oak",scientific:"Quercus laurifolia",family:"Fagaceae",order:"Fagales"},
   {common:"Overcup oak",scientific:"Quercus lyrata",family:"Fagaceae",order:"Fagales"},
-  {common:"Blackjack oak",scientific:"Quercus marilandica",family:"Fagaceae",order:"Fagales"},
+  {common:"Blackjack oak",scientific:"Quercus marilandica var. marilandica",family:"Fagaceae",order:"Fagales"},
   {common:"Swamp chestnut oak",scientific:"Quercus michauxii",family:"Fagaceae",order:"Fagales"},
   {common:"Chestnut oak",scientific:"Quercus montana",family:"Fagaceae",order:"Fagales"},
   {common:"Water oak",scientific:"Quercus nigra",family:"Fagaceae",order:"Fagales"},
@@ -411,13 +490,26 @@ const MASTER = [
   {common:"Black oak",scientific:"Quercus velutina",family:"Fagaceae",order:"Fagales"},
   {common:"Live oak",scientific:"Quercus virginiana",family:"Fagaceae",order:"Fagales"},
   {common:"Rosebay rhododendron",scientific:"Rhododendron maximum",family:"Ericaceae",order:"Ericales"},
-  {common:"Winged sumac",scientific:"Rhus copallinum",family:"Anacardiaceae",order:"Sapindales"},
+  {common:"Winged sumac",scientific:"Rhus copallinum var. copallinum",family:"Anacardiaceae",order:"Sapindales"},
   {common:"Black locust",scientific:"Robinia pseudoacacia",family:"Fabaceae",order:"Fabales"},
   {common:"Multiflora rose",scientific:"Rosa multiflora",family:"Rosaceae",order:"Rosales"},
-  {common:"Blackberry",scientific:"Rubus occidentalis",family:"Rosaceae",order:"Rosales"},
+  {common:"Blackberry/Raspberry",scientific:"Rubus spp.",family:"Rosaceae",order:"Rosales"},
   {common:"Black willow",scientific:"Salix nigra",family:"Salicaceae",order:"Malpighiales"},
   {common:"American elderberry",scientific:"Sambucus canadensis",family:"Adoxaceae",order:"Dipsacales"},
-  {common:"Sassafras",scientific:"Sassafras albidum",family:"Lauraceae",order:"Laurales"},
+  {common:"Sassafras",scientific:"Sassafras albidum",family:"Lauraceae",order:"Laurales",natHist:{
+    epithet:"\"Albidum\" means \"whitish,\" referring to the pale undersides of the leaves",
+    familyCommon:"Laurel family",
+    wildlifeUse:"Host plant for swallowtail butterfly caterpillars; fruits eaten by many birds; browsed by deer",
+    humanUse:"Roots historically used to flavor root beer and tea; dried leaves ground into filé powder used to thicken gumbo",
+    medicinalUse:"Historically used in folk medicine as a 'cure-all' tonic, though safrosole (its key oil) is now considered carcinogenic and unsafe for regular use",
+    native:"Native",
+    seedDispersal:"Birds (fruits are eaten and seeds dispersed in droppings)",
+    fruitType:"Drupe (dark blue, on a red stalk)",
+    monoeciousDioecious:"Dioecious",
+    floweringSeason:"Early spring, before leaves emerge",
+    woodUse:"Limited commercial value; lightweight, brittle wood occasionally used for furniture or fence posts",
+    invasivePest:"Laurel wilt (spread by the invasive redbay ambrosia beetle)"
+  }},
   {common:"Coast redwood",scientific:"Sequoia sempervirens",family:"Cupressaceae",order:"Pinales"},
   {common:"Giant sequoia",scientific:"Sequoiadendron giganteum",family:"Cupressaceae",order:"Pinales"},
   {common:"Roundleaf greenbrier",scientific:"Smilax rotundifolia",family:"Smilacaceae",order:"Liliales"},
@@ -434,7 +526,7 @@ const MASTER = [
   {common:"Carolina hemlock",scientific:"Tsuga caroliniana",family:"Pinaceae",order:"Pinales"},
   {common:"Western hemlock",scientific:"Tsuga heterophylla",family:"Pinaceae",order:"Pinales"},
   {common:"Winged elm",scientific:"Ulmus alata",family:"Ulmaceae",order:"Rosales"},
-  {common:"American elm",scientific:"Ulmus americana",family:"Ulmaceae",order:"Rosales"},
+  {common:"American elm",scientific:"Ulmus americana var. americana",family:"Ulmaceae",order:"Rosales"},
   {common:"Chinese elm",scientific:"Ulmus parvifolia",family:"Ulmaceae",order:"Rosales"},
   {common:"Slippery elm",scientific:"Ulmus rubra",family:"Ulmaceae",order:"Rosales"},
   {common:"Farkleberry",scientific:"Vaccinium arboreum",family:"Ericaceae",order:"Ericales"},
@@ -657,6 +749,18 @@ function removeMy(sci) {
 // ── Quiz engine ───────────────────────────────────────────────────────────────
 let queue=[], current=0, score=0, total=0, streak=0, answered=false, hintStage=0;
 let activeOrders=new Set(), missedAnimals=[], quizStartTime=null, loadingToken=0;
+let natHistOn = localStorage.getItem('dendro_nathist_on') === 'true';
+let nhScore=0, nhTotal=0, nhAnswered=false, nhCurrentKey=null, nhUsedKeys=new Set();
+
+function toggleNatHist(){
+  natHistOn = !natHistOn;
+  localStorage.setItem('dendro_nathist_on', natHistOn);
+  document.getElementById('nhSwitch').classList.toggle('on', natHistOn);
+  document.getElementById('nhScorePill').style.display = natHistOn ? 'inline-block' : 'none';
+}
+document.getElementById('nhSwitch').classList.toggle('on', natHistOn);
+document.getElementById('nhScorePill').style.display = natHistOn ? 'inline-block' : 'none';
+
 
 function getOrders() { return [...new Set(mySpecies.map(m=>m.order).filter(Boolean))].sort(); }
 
@@ -677,8 +781,10 @@ function rebuildQuiz() {
 function buildFilterBar() {
   const orders = getOrders();
   const bar = document.getElementById('filterBar');
+  const section = document.getElementById('filterToggle').parentElement;
   bar.innerHTML = '';
-  if (orders.length < 2) return;
+  if (orders.length < 2) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
   const allBtn = document.createElement('button');
   allBtn.className='filter-btn'+(activeOrders.size===orders.length?' active':'');
   allBtn.textContent='All orders';
@@ -691,17 +797,31 @@ function buildFilterBar() {
     b.onclick=()=>{ if(activeOrders.has(o)&&activeOrders.size>1)activeOrders.delete(o); else activeOrders.add(o); rebuildQueue(); renderFilters(); };
     bar.appendChild(b);
   });
+  updateFilterSummary();
+}
+function toggleFilterSection() {
+  document.getElementById('filterToggle').classList.toggle('open');
+  document.getElementById('filterBar').classList.toggle('open');
+}
+function updateFilterSummary() {
+  const orders = getOrders();
+  const summary = document.getElementById('filterSummary');
+  summary.textContent = activeOrders.size===orders.length ? '' : `(${activeOrders.size} of ${orders.length} selected)`;
 }
 function renderFilters(){
   const orders=getOrders(), btns=document.querySelectorAll('.filter-btn');
   if(!btns.length) return;
   btns[0].className='filter-btn'+(activeOrders.size===orders.length?' active':'');
   orders.forEach((o,i)=>{ btns[i+1].className='filter-btn'+(activeOrders.has(o)?' active':''); });
+  updateFilterSummary();
 }
 function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
 function rebuildQueue(){
   const f=mySpecies.filter(m=>!m.order||activeOrders.has(m.order));
   queue=shuffle([...f]); current=0;score=0;total=0;streak=0;hintStage=0;missedAnimals=[];quizStartTime=Date.now();
+  nhScore=0; nhTotal=0; nhUsedKeys=new Set();
+  document.getElementById('nhScoreDisplay').textContent='0';
+  document.getElementById('nhTotalDisplay').textContent='0';
   updateScorebar(); loadAnimal();
 }
 
@@ -717,6 +837,8 @@ async function loadAnimal(){
     const el=document.getElementById(id); el.value=''; el.className=''; el.disabled=false;
   });
   document.getElementById('feedbackBox').innerHTML='';
+  document.getElementById('nhCard').innerHTML='';
+  nhAnswered=false; nhCurrentKey=null;
   document.getElementById('submitBtn').disabled=false;
   document.getElementById('hintBtn').disabled=false;
   updateScorebar();
@@ -758,14 +880,150 @@ function checkAnswer(){
   updateScorebar();
   const box=document.getElementById('feedbackBox');
   if(correct===3){
-    box.innerHTML='<div class="feedback correct-all"><div class="feedback-row"><span class="icon">✓</span>All correct! Next question in a moment…</div></div>';
-    setTimeout(nextAnimal,1800);
+    box.innerHTML='<div class="feedback correct-all"><div class="feedback-row"><span class="icon">✓</span>All correct!</div></div>';
+    if (natHistOn && m.natHist) {
+      setTimeout(()=>showNatHistQuestion(m), 600);
+    } else {
+      setTimeout(nextAnimal,1200);
+    }
   } else {
     box.innerHTML=`<div class="feedback ${correct>=2?'partial':'wrong'}">${html}</div>`;
     document.getElementById('submitBtn').disabled=true;
+    if (natHistOn && m.natHist) {
+      setTimeout(()=>showNatHistQuestion(m), 400);
+    } else {
+      const cont=document.createElement('button');
+      cont.className='btn btn-primary'; cont.textContent='Continue →'; cont.style.marginTop='8px'; cont.style.width='100%';
+      cont.onclick=nextAnimal;
+      box.appendChild(cont);
+    }
   }
 }
 function nextAnimal(){current++;loadAnimal();}
+
+// ── Natural history questions ──────────────────────────────────────────────
+const NH_QUESTIONS = {
+  epithet:      m => `What is the meaning of the specific epithet "${m.scientific.split(' ')[1]}"?`,
+  familyCommon: m => `What is the common name of the family ${m.family}?`,
+  wildlifeUse:  m => `What is a wildlife use of ${m.common}?`,
+  humanUse:     m => `What is a human use of ${m.common}?`,
+  medicinalUse: m => `What is a medicinal use of ${m.common}?`,
+  native:       m => `Is ${m.common} native or non-native?`,
+  seedDispersal:m => `How are the seeds of ${m.common} dispersed?`,
+  fruitType:    m => `What is the fruit type of ${m.common}?`,
+  monoeciousDioecious: m => `Is ${m.common} monoecious or dioecious?`,
+  floweringSeason: m => `What season does ${m.common} flower?`,
+  woodUse:      m => `What is the wood of ${m.common} used for?`,
+  invasivePest: m => `What invasive pest/disease threatens ${m.common}?`,
+};
+
+function getSameGenusSpecies(m) {
+  const genus = m.scientific.split(' ')[0];
+  return mySpecies.filter(s => s.scientific !== m.scientific && s.scientific.split(' ')[0] === genus);
+}
+
+function pickNatHistQuestion(m) {
+  const available = [];
+  if (m.natHist) {
+    Object.keys(NH_QUESTIONS).forEach(key => {
+      if (m.natHist[key]) available.push(key);
+    });
+  }
+  const sameGenus = getSameGenusSpecies(m);
+  if (sameGenus.length) available.push('sameGenus');
+
+  if (!available.length) return null;
+  // avoid repeating the same key twice in a row for this species if possible
+  let pool = available.filter(k => k !== nhCurrentKey);
+  if (!pool.length) pool = available;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function showNatHistQuestion(m) {
+  const key = pickNatHistQuestion(m);
+  const card = document.getElementById('nhCard');
+  if (!key) { card.innerHTML=''; renderContinueButton(m); return; }
+  nhCurrentKey = key;
+  nhAnswered = false;
+
+  let questionText, answerText;
+  if (key === 'sameGenus') {
+    const options = getSameGenusSpecies(m);
+    questionText = `Name another species in your quiz that's in the same genus (${m.scientific.split(' ')[0]}) as ${m.common}.`;
+    answerText = options.map(s => `${s.common} (${s.scientific})`).join('; ');
+  } else {
+    questionText = NH_QUESTIONS[key](m);
+    answerText = m.natHist[key];
+  }
+
+  card.innerHTML = `
+    <div class="nh-card">
+      <div class="nh-label">Natural history</div>
+      <div class="nh-question">${questionText}</div>
+      <textarea class="nh-input" id="nhInput" rows="2" placeholder="Type your answer…"></textarea>
+      <div class="nh-actions">
+        <button class="btn btn-primary" id="nhRevealBtn" onclick="revealNatHist('${escapeJs(answerText)}', '${m.scientific.replace(/'/g,"\\'")}')">Reveal answer</button>
+      </div>
+    </div>`;
+  document.getElementById('nhInput').focus();
+}
+
+function escapeJs(s) { return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,' '); }
+
+function revealNatHist(answerText, sciName) {
+  const m = queue[current];
+  const card = document.getElementById('nhCard');
+  nhAnswered = true;
+  card.innerHTML = `
+    <div class="nh-card">
+      <div class="nh-label">Natural history</div>
+      <div class="nh-question">${nhCurrentKey==='sameGenus' ? `Name another species in the same genus as ${m.common}.` : NH_QUESTIONS[nhCurrentKey](m)}</div>
+      <div class="nh-answer-box"><strong>Answer</strong>${answerText}</div>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:8px">How did you do?</div>
+      <div class="nh-self-grade">
+        <button class="nh-grade-btn right" onclick="gradeNatHist(true)">✓ Got it right</button>
+        <button class="nh-grade-btn wrong" onclick="gradeNatHist(false)">✗ Got it wrong</button>
+      </div>
+    </div>`;
+}
+
+function gradeNatHist(wasRight) {
+  const m = queue[current];
+  nhTotal++;
+  if (wasRight) nhScore++;
+  document.getElementById('nhScoreDisplay') && (document.getElementById('nhScoreDisplay').textContent = nhScore);
+  document.getElementById('nhTotalDisplay') && (document.getElementById('nhTotalDisplay').textContent = nhTotal);
+  const sameGenus = getSameGenusSpecies(m);
+  const moreAvailable = (m.natHist && Object.keys(NH_QUESTIONS).some(k => m.natHist[k])) || sameGenus.length;
+  const card = document.getElementById('nhCard');
+  const wrap = document.createElement('div');
+  wrap.style.marginTop = '10px';
+  wrap.style.display = 'flex';
+  wrap.style.gap = '8px';
+  if (moreAvailable) {
+    const another = document.createElement('button');
+    another.className = 'btn'; another.style.flex='1';
+    another.textContent = 'Another question for this species';
+    another.onclick = () => showNatHistQuestion(m);
+    wrap.appendChild(another);
+  }
+  const next = document.createElement('button');
+  next.className = 'btn btn-primary'; next.style.flex='1';
+  next.textContent = 'Next species →';
+  next.onclick = nextAnimal;
+  wrap.appendChild(next);
+  card.querySelector('.nh-card').appendChild(wrap);
+}
+
+function renderContinueButton(m) {
+  const card = document.getElementById('nhCard');
+  card.innerHTML = '';
+  const cont=document.createElement('button');
+  cont.className='btn btn-primary'; cont.textContent='Continue →'; cont.style.width='100%';
+  cont.onclick=nextAnimal;
+  card.appendChild(cont);
+}
+
 function showHint(){
   const m=queue[current];
   const hints=['Family: '+(m.family||'unknown'),'Genus: '+m.scientific.split(' ')[0],'Common name starts with: "'+m.common[0].toUpperCase()+'…"'];
