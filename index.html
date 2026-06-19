@@ -52,6 +52,21 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--bg3);color:var(--te
 .nh-grade-btn.wrong{border-color:#F09595}
 .nh-grade-btn.wrong.selected{background:var(--red);color:#fff;border-color:var(--red)}
 .nh-graded-msg{font-size:12px;color:var(--text3);margin-bottom:10px}
+/* Mock quiz */
+.mock-btn{position:absolute;top:0;left:0;padding:6px 12px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg);color:var(--text2);font-size:12px;font-family:'Source Sans 3',sans-serif;font-weight:600;cursor:pointer;transition:background 0.15s;white-space:nowrap}
+.mock-btn:hover{background:var(--bg2)}
+.mock-btn.active{background:var(--green);border-color:var(--green-dark);color:#fff}
+.mock-modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:300;align-items:center;justify-content:center;padding:20px}
+.mock-modal-bg.open{display:flex}
+.mock-modal{background:var(--bg);border-radius:var(--radius-lg);border:0.5px solid var(--border);padding:28px 24px;max-width:440px;width:100%;text-align:center}
+.mock-modal h2{font-family:'Playfair Display',serif;font-size:20px;margin-bottom:6px;color:var(--text)}
+.mock-park-badge{display:inline-block;background:var(--green-light);color:var(--green-dark);border:0.5px solid var(--green);border-radius:var(--radius);padding:6px 14px;font-size:13px;font-weight:600;margin:12px 0 6px}
+.mock-sub{font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.5}
+.mock-status{font-size:13px;color:var(--text3);margin-bottom:14px;min-height:20px}
+.mock-park-banner{background:var(--green-light);border:0.5px solid var(--green);border-radius:var(--radius);padding:8px 14px;margin-bottom:14px;display:none;align-items:center;justify-content:space-between;gap:8px}
+.mock-park-banner.visible{display:flex}
+.mock-park-name{font-size:12px;font-weight:600;color:var(--green-dark)}
+.mock-park-info{font-size:11px;color:var(--green-dark);opacity:0.8}
 .scorebar{display:flex;gap:8px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
 .score-pill{background:var(--bg2);border:0.5px solid var(--border);border-radius:20px;padding:5px 14px;font-size:13px;color:var(--text2)}
 .score-pill span{font-weight:600;color:var(--text)}
@@ -180,7 +195,8 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--bg3);color:var(--te
 <body>
 <div id="app">
   <div class="header">
-    <div class="nh-toggle-wrap">
+    <button class="mock-btn" id="mockBtn" onclick="openMockQuiz()">🌳 Mock quiz</button>
+    <div class="nh-toggle-wrap" style="position:absolute;top:0;right:140px;display:flex;align-items:center;gap:6px">
       <div class="nh-switch" id="nhSwitch" onclick="toggleNatHist()"><div class="knob"></div></div>
       <span class="nh-toggle-label">Nat. history</span>
     </div>
@@ -190,6 +206,10 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--bg3);color:var(--te
   </div>
 
   <div id="quizContent">
+    <div class="mock-park-banner" id="mockBanner">
+      <span class="mock-park-name" id="mockBannerName"></span>
+      <span class="mock-park-info" id="mockBannerInfo"></span>
+    </div>
     <div class="scorebar">
       <div class="score-pill">Score <span id="scoreDisplay">0</span>/<span id="totalDisplay">0</span></div>
       <div class="score-pill">Question <span id="qNum">1</span>/<span id="qTotal">—</span></div>
@@ -309,88 +329,25 @@ const MASTER = [
   {common:"Silver maple",scientific:"Acer saccharinum",family:"Sapindaceae",order:"Sapindales"},
   {common:"Buckeye",scientific:"Aesculus spp.",family:"Sapindaceae",order:"Sapindales"},
   {common:"Tree-of-heaven",scientific:"Ailanthus altissima",family:"Simaroubaceae",order:"Sapindales"},
-  {common:"Mimosa",scientific:"Albizia julibrissin",family:"Fabaceae",order:"Fabales",natHist:{
-    epithet:"\"Julibrissin\" is derived from the Persian \"gul-i abrisham,\" meaning \"silk flower,\" referring to its fluffy pink flowers",
-    familyCommon:"Legume (pea/bean) family",
-    wildlifeUse:"Flowers attract hummingbirds, bees, and butterflies for nectar, but the fruit itself offers little wildlife value",
-    humanUse:"Widely planted historically as an ornamental for its fragrant, showy pink flowers",
-    native:"Non-native (introduced from Asia in the 1700s; now considered invasive in much of the southeastern U.S.)",
-    seedDispersal:"Wind, water, and animals; seeds can remain dormant and viable in soil for many years",
-    fruitType:"Legume (flat, elongated seed pod)",
-    monoeciousDioecious:"Monoecious (perfect flowers)",
-    floweringSeason:"Late spring to summer (May-July)"
-  }},
+  {common:"Mimosa/Silk tree",scientific:"Albizia julibrissin",family:"Fabaceae",order:"Fabales"},
   {common:"Hazel alder",scientific:"Alnus serrulata",family:"Betulaceae",order:"Fagales"},
-  {common:"Serviceberry",scientific:"Amelanchier arborea",family:"Rosaceae",order:"Rosales",natHist:{
-    epithet:"tree-like (distinguishing it from shrubbier Amelanchier species)",
-    familyCommon:"Rose family",
-    wildlifeUse:"One of the most selected Amelanchier species for birds and wildlife; fruit eaten by many songbirds and mammals",
-    humanUse:"Sweet berries used in pies, jams, and baked goods, similar to blueberries",
-    native:"Native",
-    seedDispersal:"Birds and mammals (bird ingestion helps scarify the seed coat for germination)",
-    fruitType:"Pome (small, apple-like berry)",
-    monoeciousDioecious:"Monoecious (perfect flowers)",
-    floweringSeason:"Early spring (March-April), often one of the first trees to bloom — common name \"serviceberry\" references this early bloom coinciding with spring burial \"services\" once roads thawed"
-  }},
+  {common:"Serviceberry",scientific:"Amelanchier spp.",family:"Rosaceae",order:"Rosales"},
   {common:"Heartleaf peppervine",scientific:"Ampelopsis glandulosa",family:"Vitaceae",order:"Vitales"},
   {common:"Devil's walking stick",scientific:"Aralia spinosa",family:"Araliaceae",order:"Apiales"},
   {common:"Pawpaw",scientific:"Asimina triloba",family:"Annonaceae",order:"Magnoliales"},
   {common:"Sea myrtle",scientific:"Baccharis halimifolia",family:"Asteraceae",order:"Asterales"},
-  {common:"Flowering dogwood",scientific:"Benthamidia florida",family:"Cornaceae",order:"Cornales",natHist:{
-    epithet:"\"Florida\" means \"flowering\" or \"full of flowers\"",
-    familyCommon:"Dogwood family",
-    wildlifeUse:"Red drupes are an important fall food source for migrating birds; supports over 100 species of butterflies and moths",
-    humanUse:"North Carolina's state flower; widely planted ornamental valued for spring blooms and fall color",
-    native:"Native",
-    seedDispersal:"Birds and mammals that eat the fruit",
-    fruitType:"Drupe (small, red, in clusters)",
-    monoeciousDioecious:"Monoecious (perfect flowers; the true flowers are small and greenish, surrounded by large showy white bracts)",
-    floweringSeason:"Mid-to-late spring, before leaves fully emerge",
-    woodUse:"Historically used for tool handles, golf club heads, and weaving shuttles due to its hardness",
-    invasivePest:"Dogwood anthracnose: caused by the fungus Discula destructiva)"
-  }},
-  {common:"River birch",scientific:"Betula nigra",family:"Betulaceae",order:"Fagales",natHist:{
-    epithet:"Black (referring to the dark color of older bark)",
-    familyCommon:"Birch family",
-    wildlifeUse:"Seeds eaten by many songbirds and small mammals; deer browse the foliage",
-    humanUse:"Sap can be fermented into birch beer or vinegar; Native Americans used it medicinally for colds and dysentery",
-    native:"Native",
-    seedDispersal:"Wind and water (tiny winged samaras released over an extended period from spring through summer)",
-    fruitType:"Samara (small, winged)",
-    monoeciousDioecious:"Monoecious",
-    floweringSeason:"Early spring, before leaves emerge",
-    woodUse:"Used for inexpensive furniture, artificial limbs, and children's toys; only birch native to the warm southeastern U.S."
-  }},
+  {common:"Flowering dogwood",scientific:"Benthamidia florida",family:"Cornaceae",order:"Cornales"},
+  {common:"River birch",scientific:"Betula nigra",family:"Betulaceae",order:"Fagales"},
   {common:"Crossvine",scientific:"Bignonia capreolata",family:"Bignoniaceae",order:"Lamiales"},
   {common:"American beautyberry",scientific:"Callicarpa americana",family:"Lamiaceae",order:"Lamiales"},
   {common:"Carolina allspice",scientific:"Calycanthus floridus",family:"Calycanthaceae",order:"Laurales"},
   {common:"Trumpet creeper",scientific:"Campsis radicans",family:"Bignoniaceae",order:"Lamiales"},
-  {common:"Musclewood",scientific:"Carpinus caroliniana",family:"Betulaceae",order:"Fagales",natHist:{
-    epithet:"Of or from the Carolinas",
-    familyCommon:"Birch family",
-    wildlifeUse:"Seeds, buds, and catkins eaten by songbirds, ruffed grouse, turkey, and squirrels; foliage browsed by deer and rabbits; heavily used by beavers for dam and lodge construction",
-    humanUse:"Extremely hard, dense wood historically used for tool handles, levers, and wedges due to its strength",
-    native:"Native",
-    seedDispersal:"Wind and birds (small nutlets attached to a leafy 3-lobed bract that helps it glide)",
-    fruitType:"Nutlet, attached to a leafy bract",
-    monoeciousDioecious:"Monoecious",
-    floweringSeason:"Mid-to-late spring, as leaves begin to emerge",
-    woodUse:"Tool handles and other small items requiring extreme hardness; named \"musclewood\" for its sinewy, muscle-like bark texture"
-  }},
+  {common:"American hornbeam",scientific:"Carpinus caroliniana var. virginiana",family:"Betulaceae",order:"Fagales"},
   {common:"Bitternut hickory",scientific:"Carya cordiformis",family:"Juglandaceae",order:"Fagales"},
   {common:"Pignut hickory",scientific:"Carya glabra",family:"Juglandaceae",order:"Fagales"},
   {common:"Pecan",scientific:"Carya illinoinensis",family:"Juglandaceae",order:"Fagales"},
   {common:"False shagbark hickory",scientific:"Carya ovalis",family:"Juglandaceae",order:"Fagales"},
-  {common:"Shagbark hickory",scientific:"Carya ovata",family:"Juglandaceae",order:"Fagales",natHist:{
-    epithet:"Egg-shaped (referring to the shape of the nut)",
-    familyCommon:"Walnut family",
-    wildlifeUse:"Nuts eaten by raccoons, white-tailed deer, black bears, foxes, and other wildlife; shaggy bark provides roosting habitat for bats",
-    humanUse:"Nuts were a staple food for Native Americans; wood used for tool handles, wheel spokes, and bow-making; wood smoke used to flavor meats (hickory-smoked bacon and ham)",
-    native:"Native",
-    seedDispersal:"Animals (especially squirrels, which cache and disperse the nuts)",
-    fruitType:"Nut, encased in a thick four-parted husk",
-    woodUse:"Firewood; tool handles"
-  }},
+  {common:"Shagbark hickory",scientific:"Carya ovata",family:"Juglandaceae",order:"Fagales"},
   {common:"Sand hickory",scientific:"Carya pallida",family:"Juglandaceae",order:"Fagales"},
   {common:"Mockernut hickory",scientific:"Carya tomentosa",family:"Juglandaceae",order:"Fagales"},
   {common:"American chestnut",scientific:"Castanea dentata",family:"Fagaceae",order:"Fagales"},
@@ -401,67 +358,49 @@ const MASTER = [
   {common:"Sugarberry",scientific:"Celtis laevigata",family:"Cannabaceae",order:"Rosales"},
   {common:"Dwarf hackberry",scientific:"Celtis pumila",family:"Cannabaceae",order:"Rosales"},
   {common:"Buttonbush",scientific:"Cephalanthus occidentalis",family:"Rubiaceae",order:"Gentianales"},
-  {common:"Eastern redbud",scientific:"Cercis canadensis",family:"Fabaceae",order:"Fabales",natHist:{
-    epithet:"Of or from Canada (referring to part of its native range)",
-    familyCommon:"Legume (pea/bean) family",
-    wildlifeUse:"Important early-season nectar source for native bees; deer browse the twigs and seed pods, especially in winter; squirrels and chipmunks cache and disperse seeds",
-    humanUse:"Flowers and young pods are edible, sometimes eaten raw or fried; Native Americans used bark for food and medicine",
-    native:"Native",
-    seedDispersal:"Wind and animals (squirrels and chipmunks cache the seeds)",
-    fruitType:"Legume (flattened, bean-like seed pod)",
-    monoeciousDioecious:"Monoecious (perfect flowers with both male and female parts)",
-    floweringSeason:"Early spring, before leaves emerge — flowers bloom directly on bare branches and trunk",
-  }},
+  {common:"Eastern redbud",scientific:"Cercis canadensis",family:"Fabaceae",order:"Fabales"},
   {common:"Atlantic white cedar",scientific:"Chamaecyparis thyoides",family:"Cupressaceae",order:"Pinales"},
   {common:"White fringetree",scientific:"Chionanthus virginicus",family:"Oleaceae",order:"Lamiales"},
-  {common:"Kentucky yellowwood",scientific:"Cladrastis kentukea",family:"Fabaceae",order:"Fabales"},
+  {common:"Yellowwood",scientific:"Cladrastis kentukea",family:"Fabaceae",order:"Fabales"},
   {common:"Sweet pepperbush",scientific:"Clethra alnifolia",family:"Clethraceae",order:"Ericales"},
   {common:"American hazelnut",scientific:"Corylus americana",family:"Betulaceae",order:"Fagales"},
   {common:"Hawthorn",scientific:"Crataegus spp.",family:"Rosaceae",order:"Rosales"},
-  {common:"Swamp cyrilla",scientific:"Cyrilla racemiflora",family:"Cyrillaceae",order:"Ericales"},
-  {common:"Persimmon",scientific:"Diospyros virginiana",family:"Ebenaceae",order:"Ericales",natHist:{
-    epithet:"Of or from Virginia; the genus name Diospyros means \"fruit of the gods\" in Greek",
-    familyCommon:"Ebony family",
-    wildlifeUse:"Fruit is eaten heavily by deer, raccoons, opossums, foxes, turkeys, and songbirds, especially after fall frost",
-    humanUse:"Ripe fruit used in puddings, pies, and baked goods; unripe fruit is extremely astringent and inedible",
-    native:"Native",
-    seedDispersal:"Animals (deer, raccoons, opossums; historically also extinct megafauna)",
-    fruitType:"Berry, with a distinctive beaked tip and persistent calyx",
-    monoeciousDioecious:"Dioecious (separate male and female trees; both required for fruit)",
-    floweringSeason:"Late spring to early summer (May-June)",
-    woodUse:"Extremely hard, dense wood historically used for golf club heads, billiard cues, and textile shuttles"
-  }},
+  {common:"Titi/Swamp cyrilla",scientific:"Cyrilla racemiflora",family:"Cyrillaceae",order:"Ericales"},
+  {common:"Persimmon",scientific:"Diospyros virginiana",family:"Ebenaceae",order:"Ericales"},
   {common:"Thorny olive",scientific:"Elaeagnus pungens",family:"Elaeagnaceae",order:"Rosales"},
   {common:"Autumn olive",scientific:"Elaeagnus umbellata",family:"Elaeagnaceae",order:"Rosales"},
   {common:"Strawberry bush",scientific:"Euonymus americanus",family:"Celastraceae",order:"Celastrales"},
-  {common:"American beech",scientific:"Fagus grandifolia",family:"Fagaceae",order:"Fagales",natHist:{
-    epithet:"Large-leaved (grandis = large, folium = leaf)",
+  {common:"American beech",scientific:"Fagus grandifolia var. caroliniana",family:"Fagaceae",order:"Fagales",natHist:{
+    epithet:"\"Grandifolia\" means \"large-leaved\" (grandis = large, folium = leaf)",
     familyCommon:"Beech family",
-    wildlifeUse:"Nutlets are an important mast food source for songbirds, game birds, bears, deer, squirrels, and other mammals; Porcupines eat inner bark",
+    wildlifeUse:"Beechnuts are an important mast food source for birds, bears, deer, squirrels, and other mammals",
+    humanUse:"Wood used for flooring, tool handles, containers, and fuel; nuts historically used as food by Native Americans",
+    medicinalUse:"Native Americans used beech bark/leaves in folk remedies, though it is not a major modern medicinal species",
     native:"Native",
-    seedDispersal:"Animals (especially squirrels, which bury and forget nuts)",
-    fruitType:"Nutlets (enclosed in a spiny husk)",
+    seedDispersal:"Gravity and animals (especially squirrels, which cache and forget many nuts)",
+    fruitType:"Nut (beechnut), enclosed in a spiny husk",
     monoeciousDioecious:"Monoecious",
     floweringSeason:"Spring, around the same time leaves emerge",
-    woodUse:"Flooring, panelling, woodenware (bowls)",
+    woodUse:"Flooring, furniture, tool handles, and fuelwood; not commonly used by fine woodworkers due to warping",
     invasivePest:"Beech bark disease (beech scale insect + Neonectria fungus)"
   }},
   {common:"White ash",scientific:"Fraxinus americana",family:"Oleaceae",order:"Lamiales",natHist:{
-    epithet:"Of or from America",
+    epithet:"\"Americana\" simply means \"of America\"",
     familyCommon:"Olive family",
     wildlifeUse:"Seeds (samaras) eaten by birds like finches and cardinals; cavities in older trees used by woodpeckers and owls",
     humanUse:"Historically used for baseball bats, tool handles, oars, and furniture due to strength and flexibility",
     medicinalUse:"Bark has been used in folk medicine as a tonic/astringent, though not a major modern medicinal species",
     native:"Native",
     seedDispersal:"Wind (samaras spin like helicopters)",
-    fruitType:"Samara (single-winged - shaped like boat oar)",
+    fruitType:"Samara (single-winged)",
     monoeciousDioecious:"Dioecious",
-    woodUse:"Baseball bats, boat oars, cabinets, flooring",
+    floweringSeason:"Early spring, before leaves emerge",
+    woodUse:"Baseball bats, tool handles, hockey sticks, furniture, and flooring",
     invasivePest:"Emerald ash borer"
   }},
   {common:"Carolina ash",scientific:"Fraxinus caroliniana",family:"Oleaceae",order:"Lamiales"},
   {common:"Green ash",scientific:"Fraxinus pennsylvanica",family:"Oleaceae",order:"Lamiales"},
-  {common:"Huckleberry",scientific:"Gaylussacia frondosa",family:"Ericaceae",order:"Ericales"},
+  {common:"Blue huckleberry",scientific:"Gaylussacia frondosa",family:"Ericaceae",order:"Ericales"},
   {common:"Carolina jessamine",scientific:"Gelsemium sempervirens",family:"Gelsemiaceae",order:"Gentianales"},
   {common:"Ginkgo",scientific:"Ginkgo biloba",family:"Ginkgoaceae",order:"Ginkgoales"},
   {common:"Honey locust",scientific:"Gleditsia triacanthos",family:"Fabaceae",order:"Fabales"},
@@ -471,146 +410,39 @@ const MASTER = [
   {common:"Leyland cypress",scientific:"Hesperotropsis leylandii",family:"Cupressaceae",order:"Pinales"},
   {common:"Oakleaf hydrangea",scientific:"Hydrangea quercifolia",family:"Hydrangeaceae",order:"Cornales"},
   {common:"Possumhaw",scientific:"Ilex decidua",family:"Aquifoliaceae",order:"Aquifoliales"},
-  {common:"American holly",scientific:"Ilex opaca",family:"Aquifoliaceae",order:"Aquifoliales",natHist:{
-    epithet:"\"shaded\" or \"opaque,\" likely referring to its dull (non-glossy) leaf surface compared to other hollies",
-    familyCommon:"Holly family",
-    wildlifeUse:"Berries eaten by at least 18 bird species including cedar waxwings and American goldfinches, which strip entire trees in winter flocks; also eaten by deer and small mammals",
-    humanUse:"Popular ornamental and Christmas decoration; white wood used in furniture inlays, woodworking, and carvings",
-    native:"Native",
-    seedDispersal:"Birds (especially winter-migrating flocks like cedar waxwings) and small mammals",
-    fruitType:"Drupe (bright red berry-like fruit, technically called a pyrene)",
-    monoeciousDioecious:"Dioecious",
-    floweringSeason:"Spring (April-June, varies by latitude)",
-    woodUse:"Fine white wood used for inlays, marquetry, carvings, and turnings"
-  }},
+  {common:"American holly",scientific:"Ilex opaca",family:"Aquifoliaceae",order:"Aquifoliales"},
   {common:"Winterberry",scientific:"Ilex verticillata",family:"Aquifoliaceae",order:"Aquifoliales"},
   {common:"Yaupon holly",scientific:"Ilex vomitoria",family:"Aquifoliaceae",order:"Aquifoliales"},
   {common:"Virginia willow",scientific:"Itea virginica",family:"Iteaceae",order:"Saxifragales"},
   {common:"Butternut",scientific:"Juglans cinerea",family:"Juglandaceae",order:"Fagales"},
-  {common:"Black walnut",scientific:"Juglans nigra",family:"Juglandaceae",order:"Fagales",natHist:{
-    epithet:"Black (referring to the dark bark and nuts); the genus name Juglans comes from Latin \"Jovis glans\" meaning \"Jupiter's acorn\"",
-    familyCommon:"Walnut family",
-    wildlifeUse:"Nuts are a favorite food of squirrels, which are among the few animals strong enough to gnaw through the hard shells; also a larval host for luna moths and regal moths",
-    humanUse:"Highly prized for furniture, gunstocks, and veneer; nuts used for food, and husks used to make a black/brown dye",
-    native:"Native",
-    seedDispersal:"Animals, primarily squirrels, which cache the nuts",
-    fruitType:"Nut, encased in a thick green husk",
-    monoeciousDioecious:"Monoecious",
-    floweringSeason:"Late spring (May-June)",
-    woodUse:"One of the most valuable North American hardwoods; used for fine furniture, cabinets, and gunstocks",
-    invasivePest:"Thousand cankers disease (spread by the walnut twig beetle)"
-  }},
+  {common:"Black walnut",scientific:"Juglans nigra",family:"Juglandaceae",order:"Fagales"},
   {common:"Eastern redcedar",scientific:"Juniperus virginiana",family:"Cupressaceae",order:"Pinales"},
   {common:"Mountain laurel",scientific:"Kalmia latifolia",family:"Ericaceae",order:"Ericales"},
   {common:"Lespedeza bicolor",scientific:"Lespedeza bicolor",family:"Fabaceae",order:"Fabales"},
-  {common:"Sericea lespedeza",scientific:"Lespedeza cuneata",family:"Fabaceae",order:"Fabales",natHist:{
-    epithet:"wedge-shaped (referring to its narrow, tapering leaflets); the common name \"sericea\" comes from the former species name meaning \"silky,\" referring to its hairy leaves",
-    familyCommon:"Legume (pea/bean) family",
-    wildlifeUse:"Very limited value to wildlife despite being planted historically for quail; tannins make it unpalatable to grazers and its seeds offer poor nutrition for game birds",
-    humanUse:"Originally introduced for erosion control, mine reclamation, and livestock forage, though it proved a poor forage choice",
-    native:"Non-native (introduced from eastern Asia in the late 1800s)",
-    seedDispersal:"Gravity, animals (some bird dispersal, e.g., quail), and human activity (mowing, vehicles)",
-    fruitType:"Small legume pod, each containing one seed",
-    floweringSeason:"Late summer to fall (July-October)"
-  }},
+  {common:"Sericea lespedeza",scientific:"Lespedeza cuneata",family:"Fabaceae",order:"Fabales"},
   {common:"Drooping leucothoe",scientific:"Leucothoe fontanesiana",family:"Ericaceae",order:"Ericales"},
   {common:"Glossy privet",scientific:"Ligustrum lucidum",family:"Oleaceae",order:"Lamiales"},
   {common:"Chinese privet",scientific:"Ligustrum sinense",family:"Oleaceae",order:"Lamiales"},
   {common:"Spicebush",scientific:"Lindera benzoin",family:"Lauraceae",order:"Laurales"},
-  {common:"Sweetgum",scientific:"Liquidambar styraciflua",family:"Altingiaceae",order:"Saxifragales",natHist:{
-    epithet:"\"flowing with storax\" (a fragrant resin), referring to the aromatic gum that exudes from wounds in the bark",
-    familyCommon:"Altingia family",
-    wildlifeUse:"Small winged seeds (held in spiky \"gumball\" fruits) eaten by squirrels, chipmunks, and birds such as doves and finches; black bears den in hollows; inner bark eaten by beavers",
-    humanUse:"Resin historically used for chewing gum, incense, perfumes, and folk medicine; first in number of acres of hardwood plantation",
-    native:"Native",
-    seedDispersal:"Wind (small winged seeds released from spiky seed balls)",
-    fruitType:"Multiple of capsules, forming a spiky \"gumball\"",
-    monoeciousDioecious:"Monoecious",
-    floweringSeason:"Spring (March-May)",
-    woodUse:"One of the most common commercial hardwoods in the U.S.; used for lumber, railroad ries, furniture, panelling, plywood, and pulpwood"
-  }},
-  {common:"Tulip poplar",scientific:"Liriodendron tulipifera var. tulipifera",family:"Magnoliaceae",order:"Magnoliales",natHist:{
-    epithet:"Tulip-bearing (referring to its large tulip-shaped flowers)",
-    familyCommon:"Magnolia family",
-    wildlifeUse:"Flowers attract hummingbirds and pollinators; nesting tree for birds; seeds eaten by squirrels and birds",
-    humanUse:"Native Americans hollowed out trunks to make dugout canoes; wood used for furniture, crates, musical instruments, and pulpwood",
-    native:"Native",
-    seedDispersal:"Wind (samara-like winged seeds fall from cone-shaped seed heads)",
-    fruitType:"Aggregate of samaras (cone-shaped cluster of winged seeds)",
-    monoeciousDioecious:"Monoecious (perfect flowers with both male and female parts)",
-    floweringSeason:"Late spring (April to June)",
-    woodUse:"Furniture, plywood, boatbuilding, paper pulp, and general lumber; also called \"yellow poplar\" for its yellowish heartwood"
-  }},
+  {common:"Sweetgum",scientific:"Liquidambar styraciflua",family:"Altingiaceae",order:"Saxifragales"},
+  {common:"Tulip poplar",scientific:"Liriodendron tulipifera var. tulipifera",family:"Magnoliaceae",order:"Magnoliales"},
   {common:"Japanese honeysuckle",scientific:"Lonicera japonica",family:"Caprifoliaceae",order:"Dipsacales"},
   {common:"Osage orange",scientific:"Maclura pomifera",family:"Moraceae",order:"Rosales"},
-  {common:"Southern magnolia",scientific:"Magnolia grandiflora",family:"Magnoliaceae",order:"Magnoliales",natHist:{
-    epithet:"large-flowered",
-    familyCommon:"Magnolia family",
-    wildlifeUse:"Bright red seeds, high in fat, eaten by squirrels, opossums, turkeys, quail, and many songbirds; beetles are key pollinators",
-    humanUse:"Widely planted ornamental shade tree; dried leaves used by florists in decorations; bark historically used by the Choctaw for medicinal skin washes",
-    native:"Native",
-    seedDispersal:"Birds, mammals, wind, and heavy rain (bright red seeds dangle from silky threads after cone-like pods split open)",
-    fruitType:"Aggregate of follicles (cone-like, releasing red seeds)",
-    monoeciousDioecious:"Monoecious (perfect flowers)",
-    floweringSeason:"Late spring through summer (intermittently into fall)",
-    woodUse:"Limited commercial use; occasionally used for furniture and veneer"
-  }},
+  {common:"Southern magnolia",scientific:"Magnolia grandiflora",family:"Magnoliaceae",order:"Magnoliales"},
   {common:"Umbrella magnolia",scientific:"Magnolia tripetala",family:"Magnoliaceae",order:"Magnoliales"},
   {common:"Sweetbay magnolia",scientific:"Magnolia virginiana var. virginiana",family:"Magnoliaceae",order:"Magnoliales"},
   {common:"Chinaberry",scientific:"Melia azedarach",family:"Meliaceae",order:"Sapindales"},
   {common:"Dawn redwood",scientific:"Metasequoia glyptostroboides",family:"Cupressaceae",order:"Pinales"},
-  {common:"Japanese stiltgrass",scientific:"Microstegium vimineum",family:"Poaceae",order:"Poales"},
+  {common:"Stiltgrass",scientific:"Microstegium vimineum",family:"Poaceae",order:"Poales"},
   {common:"Wax myrtle",scientific:"Morella cerifera",family:"Myricaceae",order:"Fagales"},
   {common:"White mulberry",scientific:"Morus alba",family:"Moraceae",order:"Rosales"},
   {common:"Red mulberry",scientific:"Morus rubra",family:"Moraceae",order:"Rosales"},
   {common:"Muscadine grape",scientific:"Muscadinia rotundifolia var. rotundifolia",family:"Vitaceae",order:"Vitales"},
-  {common:"Blackgum",scientific:"Nyssa sylvatica",family:"Nyssaceae",order:"Cornales",natHist:{
-    epithet:"Of/from the woods; the genus Nyssa is named for a Greek water nymph",
-    familyCommon:"Tupelo family",
-    wildlifeUse:"Fat-rich fruit is highly attractive to migrating and resident songbirds (thrushes, woodpeckers, waxwings), as well as black bears, foxes, and squirrels; flowers are a major nectar source for bees",
-    humanUse:"Tupelo honey, made from its nectar, is a prized specialty honey",
-    native:"Native",
-    seedDispersal:"Birds, gravity, and mammals",
-    fruitType:"Drupe (dark blue, oval)",
-    monoeciousDioecious:"Dioecious (technically \"polygamo-dioecious\" — mostly separate male and female trees, with occasional perfect flowers)",
-    floweringSeason:"Late spring (April-June)",
-    woodUse:"Limited commercial use due to twisted, interlocking grain that resists splitting; occasionally used for pallets, crates, and veneer"
-  }},
-  {common:"Eastern hophornbeam",scientific:"Ostrya virginiana",family:"Betulaceae",order:"Fagales",natHist:{
-    epithet:"Of or from Virginia (referencing the colony where it was first described)",
-    familyCommon:"Birch family",
-    wildlifeUse:"Buds and catkins are important winter food for ruffed grouse and wild turkey, comparable in value to aspen and birch; also eaten by squirrels, cottontails, and deer",
-    humanUse:"Common name \"ironwood\" reflects its extremely hard, dense wood, historically used to make tool handles and levers",
-    native:"Native",
-    seedDispersal:"Wind and gravity (small nutlets enclosed in papery, hop-like sacs); fun mnemonic: \"Ostrya\" sounds like \"Austria\", which is known for its beer/hops -> hence, Hophornbeam",
-    fruitType:"Nutlet, enclosed in an inflated papery sac resembling hops",
-    monoeciousDioecious:"Monoecious",
-    floweringSeason:"Spring (April-May)",
-    woodUse:"Extremely hard, dense wood used for tool handles, mallets, and other items needing durability; too small for commercial lumber"
-  }},
-  {common:"Sourwood",scientific:"Oxydendrum arboreum",family:"Ericaceae",order:"Ericales",natHist:{
-    epithet:"Tree-like or \"of a tree\" in Latin; the genus name Oxydendrum means \"sour tree\" (Greek oxys = acid)",
-    familyCommon:"Heath family",
-    wildlifeUse:"Flowers are a major nectar source for bees; deer browse the young shoots; provides small den cavities for bears",
-    humanUse:"Sourwood honey, made from its nectar, is a prized regional delicacy; leaves were historically chewed by travelers to relieve thirst due to their sour taste",
-    native:"Native",
-    seedDispersal:"Wind (tiny seeds released from dry capsules)",
-    fruitType:"Capsule (5-parted, dry)",
-    floweringSeason:"Early-to-mid summer (June-July), later than most flowering trees",
-    woodUse:"Limited commercial value; occasionally used for tool handles and as fuelwood"
-  }},
-  {common:"Virginia creeper",scientific:"Parthenocissus quinquefolia",family:"Vitaceae",order:"Vitales",natHist:{
-    epithet:"Five-leaved (referring to its five palmate leaflets); the genus name Parthenocissus means \"virgin ivy\" in Greek",
-    familyCommon:"Grape family",
-    wildlifeUse:"Berries are a favorite food of songbirds, woodpeckers, deer, and squirrels, especially in fall/winter",
-    humanUse:"Used ornamentally as a climbing vine or ground cover for its brilliant red fall color",
-    native:"Native",
-    seedDispersal:"Birds and other animals that eat the berries",
-    fruitType:"Berry (bluish-black, grape-like, but toxic to humans)",
-    monoeciousDioecious:"Monoecious (perfect flowers)",
-    floweringSeason:"Late spring to summer (June-July)"
-  }},
-  {common:"Princesstree",scientific:"Paulownia tomentosa",family:"Paulowniaceae",order:"Lamiales"},
+  {common:"Blackgum",scientific:"Nyssa sylvatica",family:"Nyssaceae",order:"Cornales"},
+  {common:"Eastern hophornbeam",scientific:"Ostrya virginiana",family:"Betulaceae",order:"Fagales"},
+  {common:"Sourwood",scientific:"Oxydendrum arboreum",family:"Ericaceae",order:"Ericales"},
+  {common:"Virginia creeper",scientific:"Parthenocissus quinquefolia",family:"Vitaceae",order:"Vitales"},
+  {common:"Paulownia/Princesstree",scientific:"Paulownia tomentosa",family:"Paulowniaceae",order:"Lamiales"},
   {common:"Eastern mistletoe",scientific:"Phoradendron leucarpum",family:"Santalaceae",order:"Santalales"},
   {common:"Golden bamboo",scientific:"Phyllostachys aurea",family:"Poaceae",order:"Poales"},
   {common:"Norway spruce",scientific:"Picea abies",family:"Pinaceae",order:"Pinales"},
@@ -631,87 +463,38 @@ const MASTER = [
   {common:"Table Mountain pine",scientific:"Pinus pungens",family:"Pinaceae",order:"Pinales"},
   {common:"Pitch pine",scientific:"Pinus rigida",family:"Pinaceae",order:"Pinales"},
   {common:"Pond pine",scientific:"Pinus serotina",family:"Pinaceae",order:"Pinales"},
-  {common:"Eastern white pine",scientific:"Pinus strobus",family:"Pinaceae",order:"Pinales",natHist:{
-    epithet:"Greek word for \"pine cone\"",
-    familyCommon:"Pine family",
-    wildlifeUse:"Seeds eaten by songbirds (chickadees, nuthatches, crossbills) and mammals (squirrels, deer, snowshoe hares); large branches used as nesting/resting sites by bald eagles",
-    humanUse:"Colonial-era: grown in lake-states and Northeast & ship masts were cut from its tall, straight trunks; Pine Tree Riot; sometimes used as Christmas trees; not fire tolerant",
-    native:"Native",
-    seedDispersal:"Wind (small winged seeds released from open cones)",
-    fruitType:"Cone - thin, long, whitish scales that are sticky from resin",
-    monoeciousDioecious:"Monoecious",
-    woodUse:"Historically prized for ship masts; still used for lumber, paneling, sashes, and doors due to its light weight and softness",
-    invasivePest:"White pine blister rust (introduced fungus)"
-  }},
-  {common:"Loblolly pine",scientific:"Pinus taeda",family:"Pinaceae",order:"Pinales",natHist:{
-    epithet:"\"Taeda\" is Latin for \"torch\" or \"resinous wood,\" referring to its resinous nature; the common name \"loblolly\" refers to a muddy depression or mud puddle, habitats it often grows in",
-    familyCommon:"Pine family",
-    wildlifeUse:"Seeds are an important food source for many species; old, decayed loblolly pines provide critical nesting cavities for the endangered red-cockaded woodpecker",
-    humanUse:"Leading commercial timber species in the southeastern U.S., used extensively for pulpwood and lumber",
-    native:"Native",
-    seedDispersal:"Wind (winged seeds dispersed 200-300 feet from the parent tree)",
-    fruitType:"Cone",
-    monoeciousDioecious:"Monoecious",
-    floweringSeason:"Late winter to early spring (February-March)",
-    woodUse:"Major source of pulpwood and lumber in the southeastern U.S.; also yields resin used historically for turpentine"
-  }},
+  {common:"Eastern white pine",scientific:"Pinus strobus",family:"Pinaceae",order:"Pinales"},
+  {common:"Loblolly pine",scientific:"Pinus taeda",family:"Pinaceae",order:"Pinales"},
   {common:"Virginia pine",scientific:"Pinus virginiana",family:"Pinaceae",order:"Pinales"},
   {common:"Chinese pistache",scientific:"Pistacia chinensis",family:"Anacardiaceae",order:"Sapindales"},
-  {common:"Sycamore",scientific:"Platanus occidentalis",family:"Platanaceae",order:"Proteales",natHist:{
-    epithet:"Western (eferring to the Western Hemisphere relative to the original Old World plane tree)",
-    familyCommon:"Plane-tree family",
-    wildlifeUse:"Hollow trunks provide den sites for raccoons, opossums, and wood ducks; seeds feed songbirds through the winter",
-    humanUse:"Native Americans hollowed out trunks for dugout canoes; widely planted as a shade tree for its mottled, exfoliating bark",
-    native:"Native",
-    seedDispersal:"Wind and water (spherical seed balls break apart, releasing tufted achenes)",
-    fruitType:"Multiple of achenes, forming a spherical \"seed ball\"",
-    monoeciousDioecious:"Monoecious",
-    floweringSeason:"Spring (March-April)",
-    woodUse:"Furniture, cabinets, barrels, crates, and butcher blocks due to its fine, interlocked grain that resists splitting"
-  }},
+  {common:"Sycamore",scientific:"Platanus occidentalis var. occidentalis",family:"Platanaceae",order:"Proteales"},
   {common:"Eastern cottonwood",scientific:"Populus deltoides ssp. deltoides",family:"Salicaceae",order:"Malpighiales"},
   {common:"Carolina cherry laurel",scientific:"Prunus caroliniana",family:"Rosaceae",order:"Rosales"},
-  {common:"Black cherry",scientific:"Prunus serotina",family:"Rosaceae",order:"Rosales",natHist:{
-    epithet:"Late (referring to its later bloom time compared to other native cherries)",
-    familyCommon:"Rose family",
-    wildlifeUse:"Fruit eaten by over 30 species of birds and many mammals; host plant for eastern tiger swallowtail and other butterflies/moths; (note: leaves, bark, and seeds contain cyanogenic compounds toxic to livestock and humans if ingested)",
-    humanUse:"Fruit used in jellies, jams, pies, and wine; inner bark historically used in cough syrups",
-    medicinalUse:"Inner bark has been used in folk medicine as a cough suppressant, sedative, and tonic",
-    native:"Native",
-    seedDispersal:"Birds and mammals (the fruit is structured so animals must swallow the pit to eat the flesh)",
-    fruitType:"Drupe",
-    floweringSeason:"Late spring (after most other native cherries have already flowered)",
-    woodUse:"Highly prized for fine furniture and cabinetry due to its rich reddish-brown color and fine grain",
-}},
+  {common:"Black cherry",scientific:"Prunus serotina var. serotina",family:"Rosaceae",order:"Rosales"},
   {common:"Rocky Mountain Douglas-fir",scientific:"Pseudotsuga menziesii var. glauca",family:"Pinaceae",order:"Pinales"},
   {common:"Coast Douglas-fir",scientific:"Pseudotsuga menziesii var. menziesii",family:"Pinaceae",order:"Pinales"},
   {common:"Kudzu",scientific:"Pueraria montana var. lobata",family:"Fabaceae",order:"Fabales"},
   {common:"Callery pear",scientific:"Pyrus calleryana",family:"Rosaceae",order:"Rosales"},
   {common:"Sawtooth oak",scientific:"Quercus acutissima",family:"Fagaceae",order:"Fagales"},
   {common:"White oak",scientific:"Quercus alba",family:"Fagaceae",order:"Fagales",natHist:{
-    epithet:"White (color of bark, which appears shaggy in larger trees)",
+    epithet:"\"Alba\" means \"white,\" referring to the light ash-gray bark color (the common name actually refers to the pale finished wood color)",
     familyCommon:"Beech family",
-    wildlifeUse:"Acorns are eaten by wood ducks, game birds, bears, deer, squirrels, etc.",
+    wildlifeUse:"Acorns are a critical food source for deer, squirrels, turkeys, and many other species; the tree supports huge numbers of insects, providing food for birds",
+    humanUse:"Iconic American hardwood used in shipbuilding, furniture, and barrel/cask making (notably for aging whiskey and wine)",
+    medicinalUse:"Bark has astringent properties and was historically used to treat diarrhea",
     native:"Native",
-    seedDispersal:"Animals (squirrels bury and forget acorns)",
-    fruitType:"Nut (acorn), matures in a single season and germinates in the fall (white oak group); cobbled acorn caps",
+    seedDispersal:"Animals, especially scatter-hoarding by squirrels, which bury and forget many acorns",
+    fruitType:"Nut (acorn), matures in a single season (white oak group)",
     monoeciousDioecious:"Monoecious",
-    woodUse:"Furniture, flooring, boats, and whiskey/wine barrels — prized for strength and rot resistance (tight cooperage)",
+    floweringSeason:"Spring, with leaf emergence",
+    woodUse:"Furniture, flooring, shipbuilding, and whiskey/wine barrels — prized for strength and rot resistance",
+    invasivePest:"None of the listed pests/diseases (not significantly threatened by beech bark disease, EAB, laurel wilt, DED, or thousand cankers)"
   }},
   {common:"Swamp white oak",scientific:"Quercus bicolor",family:"Fagaceae",order:"Fagales"},
-  {common:"Scarlet oak",scientific:"Quercus coccinea",family:"Fagaceae",order:"Fagales",natHist:{
-    epithet:"Scarlet (leaves)", 
-    familyCommon:"Beech family", 
-    wildlifeUse:"Acorns are valuable for wildlife but selected less due to higher concentration of tannins",  
-    native:"Native", 
-    seedDispersal:"Animals (squirrels bury and forget acorns",
-    fruitType:"Nut (acorn), matures in two seasons and germinates in spring (red oak group)", 
-    monoeciousDioecious:"Monoecious",
-    woodUse:"Lumber used for flooring, furniture, crates & barrels (but not for liquid - does not have tight cooperage)", 
-  }},
+  {common:"Scarlet oak",scientific:"Quercus coccinea",family:"Fagaceae",order:"Fagales"},
   {common:"Darlington oak",scientific:"Quercus hemisphaerica",family:"Fagaceae",order:"Fagales"},
   {common:"Southern red oak",scientific:"Quercus falcata",family:"Fagaceae",order:"Fagales"},
-  {common:"Laurel oak",scientific:"Quercus laurifolia",family:"Fagaceae"},
+  {common:"Laurel oak",scientific:"Quercus laurifolia",family:"Fagaceae",order:"Fagales"},
   {common:"Overcup oak",scientific:"Quercus lyrata",family:"Fagaceae",order:"Fagales"},
   {common:"Blackjack oak",scientific:"Quercus marilandica var. marilandica",family:"Fagaceae",order:"Fagales"},
   {common:"Swamp chestnut oak",scientific:"Quercus michauxii",family:"Fagaceae",order:"Fagales"},
@@ -719,18 +502,7 @@ const MASTER = [
   {common:"Water oak",scientific:"Quercus nigra",family:"Fagaceae",order:"Fagales"},
   {common:"Cherrybark oak",scientific:"Quercus pagoda",family:"Fagaceae",order:"Fagales"},
   {common:"Pin oak",scientific:"Quercus palustris",family:"Fagaceae",order:"Fagales"},
-  {common:"Willow oak",scientific:"Quercus phellos",family:"Fagaceae",order:"Fagales",natHist:{
-    epithet:"\"Phellos\" is Greek for \"cork,\" though the name's exact reference is debated; the common name comes from its narrow, willow-like leaves",
-    familyCommon:"Beech family",
-    wildlifeUse:"Produces acorns almost every year, making it a major food source for ducks, squirrels, deer, and turkeys; also provides habitat for nesting birds and tree frogs",
-    humanUse:"Popular street and shade tree due to fast growth, fibrous root system, and tolerance of urban pollution",
-    native:"Native",
-    seedDispersal:"Animals (squirrels, deer, and birds cache and disperse acorns) and gravity",
-    fruitType:"Nut (small acorn, in the red oak group, matures in two seasons)",
-    monoeciousDioecious:"Monoecious",
-    floweringSeason:"Spring (February-May), about a week before leaf buds open",
-    woodUse:"Used for lumber, crossties, and pulp"
-  }},
+  {common:"Willow oak",scientific:"Quercus phellos",family:"Fagaceae",order:"Fagales"},
   {common:"Northern red oak",scientific:"Quercus rubra var. rubra",family:"Fagaceae",order:"Fagales"},
   {common:"Shumard oak",scientific:"Quercus shumardii",family:"Fagaceae",order:"Fagales"},
   {common:"Post oak",scientific:"Quercus stellata",family:"Fagaceae",order:"Fagales"},
@@ -738,16 +510,16 @@ const MASTER = [
   {common:"Black oak",scientific:"Quercus velutina",family:"Fagaceae",order:"Fagales"},
   {common:"Live oak",scientific:"Quercus virginiana",family:"Fagaceae",order:"Fagales"},
   {common:"Rosebay rhododendron",scientific:"Rhododendron maximum",family:"Ericaceae",order:"Ericales"},
-  {common:"Winged sumac",scientific:"Rhus copallinum",family:"Anacardiaceae",order:"Sapindales"},
+  {common:"Winged sumac",scientific:"Rhus copallinum var. copallinum",family:"Anacardiaceae",order:"Sapindales"},
   {common:"Black locust",scientific:"Robinia pseudoacacia",family:"Fabaceae",order:"Fabales"},
   {common:"Multiflora rose",scientific:"Rosa multiflora",family:"Rosaceae",order:"Rosales"},
-  {common:"Blackberry",scientific:"Rubus spp.",family:"Rosaceae",order:"Rosales"},
+  {common:"Blackberry/Raspberry",scientific:"Rubus spp.",family:"Rosaceae",order:"Rosales"},
   {common:"Black willow",scientific:"Salix nigra",family:"Salicaceae",order:"Malpighiales"},
   {common:"American elderberry",scientific:"Sambucus canadensis",family:"Adoxaceae",order:"Dipsacales"},
   {common:"Sassafras",scientific:"Sassafras albidum",family:"Lauraceae",order:"Laurales",natHist:{
-    epithet:"White-ish (referring to the pale undersides of the leaves)",
+    epithet:"\"Albidum\" means \"whitish,\" referring to the pale undersides of the leaves",
     familyCommon:"Laurel family",
-    wildlifeUse:"Host plant for swallowtail butterfly caterpillars; songbirds eat fruit; deer browse",
+    wildlifeUse:"Host plant for swallowtail butterfly caterpillars; fruits eaten by many birds; browsed by deer",
     humanUse:"Roots historically used to flavor root beer and tea; dried leaves ground into filé powder used to thicken gumbo",
     medicinalUse:"Historically used in folk medicine as a 'cure-all' tonic, though safrosole (its key oil) is now considered carcinogenic and unsafe for regular use",
     native:"Native",
@@ -767,59 +539,14 @@ const MASTER = [
   {common:"Sweetleaf",scientific:"Symplocos tinctoria",family:"Symplocaceae",order:"Ericales"},
   {common:"Pond cypress",scientific:"Taxodium ascendens",family:"Cupressaceae",order:"Pinales"},
   {common:"Bald cypress",scientific:"Taxodium distichum",family:"Cupressaceae",order:"Pinales"},
-  {common:"Northern white cedar",scientific:"Thuja occidentalis",family:"Cupressaceae",order:"Pinales"},
-  {common:"Poison ivy",scientific:"Toxicodendron radicans var. radicans",family:"Anacardiaceae",order:"Sapindales",natHist:{
-    epithet:"Rooting (referring to the aerial roots it uses to climb); the genus name Toxicodendron means \"poison tree\" in Greek",
-    familyCommon:"Cashew/sumac family",
-    wildlifeUse:"Berries are an important fall/winter food source for over 60 bird species (birds are immune to urushiol); deer browse the foliage without ill effect",
-    humanUse:"Despite being widely removed by humans due to skin irritation, it is left undisturbed in natural areas to support wildlife",
-    native:"Native",
-    seedDispersal:"Birds (eat the berries and excrete the seeds, spreading them widely) and vegetative spread via rhizomes",
-    fruitType:"Drupe (grayish-white berry)",
-    floweringSeason:"Late spring to summer (May-July)",
-  }},
+  {common:"Northern white cedar/Arborvitae",scientific:"Thuja occidentalis",family:"Cupressaceae",order:"Pinales"},
+  {common:"Poison ivy",scientific:"Toxicodendron radicans var. radicans",family:"Anacardiaceae",order:"Sapindales"},
   {common:"Chinese tallow tree",scientific:"Triadica sebifera",family:"Euphorbiaceae",order:"Malpighiales"},
-  {common:"Eastern hemlock",scientific:"Tsuga canadensis",family:"Pinaceae",order:"Pinales",natHist:{
-    epithet:"Of/from Canada (referring to where the earliest specimens were collected for description in Europe)",
-    familyCommon:"Pine family",
-    wildlifeUse:"Dense evergreen boughs provide critical winter cover and bedding sites for deer; seeds eaten by chickadees and small mammals; porcupines chew the inner bark",
-    humanUse:"Bark was historically a major commercial source of tannin used in leather tanning",
-    native:"Native",
-    seedDispersal:"Wind (small winged seeds released from cones)",
-    fruitType:"Cone (small, less than 1 inch)",
-    monoeciousDioecious:"Monoecious",
-    floweringSeason:"Spring (April-May)",
-    woodUse:"Historically used for light framing, sheathing, and roofing; today mostly used for pulp and paper",
-    invasivePest:"Hemlock woolly adelgid"
-  }},
+  {common:"Eastern hemlock",scientific:"Tsuga canadensis",family:"Pinaceae",order:"Pinales"},
   {common:"Carolina hemlock",scientific:"Tsuga caroliniana",family:"Pinaceae",order:"Pinales"},
   {common:"Western hemlock",scientific:"Tsuga heterophylla",family:"Pinaceae",order:"Pinales"},
-  {common:"Winged elm",scientific:"Ulmus alata",family:"Ulmaceae",order:"Rosales",natHist:{
-    epithet:"Winged (referring to the distinctive corky wing-like ridges on its twigs and branches)",
-    familyCommon:"Elm family",
-    wildlifeUse:"Seeds eaten by birds and small mammals; foliage browsed by rabbits; provides nesting cover for insectivorous birds",
-    humanUse:"Fibrous inner bark was historically twisted into rope for baling cotton; common name \"Wahoo\" comes from the Creek language",
-    medicinalUse:"Native Americans steeped the inner bark to treat diarrhea and to ease childbirth",
-    native:"Native",
-    seedDispersal:"Wind (small winged samaras)",
-    fruitType:"Samara",
-    floweringSeason:"Late winter to early spring (February-April), before leaves emerge",
-    woodUse:"Heavy wood used for furniture, crates, and boxes",
-    invasivePest:"Dutch elm disease (though notably more resistant than American elm)"
-}},
-  {common:"American elm",scientific:"Ulmus americana var. americana",family:"Ulmaceae",order:"Rosales",natHist:{
-  epithet:"Of/from America",
-  familyCommon:"Elm family",
-  wildlifeUse:"Seeds and buds eaten by birds and small mammals; provides nesting and cavity habitat",
-  humanUse:"Once one of the most widely planted street and shade trees in the U.S. due to its graceful vase-shaped form",
-  native:"Native",
-  seedDispersal:"Wind (small winged samaras)",
-  fruitType:"Samara",
-  monoeciousDioecious:"Monoecious (perfect flowers)",
-  floweringSeason:"Early spring, before leaves emerge",
-  woodUse:"Historically used for boats, furniture, and farm buildings due to its water resistance and tough, interlocked grain",
-  invasivePest:"Dutch elm disease (spread by elm bark beetles)"
-}},
+  {common:"Winged elm",scientific:"Ulmus alata",family:"Ulmaceae",order:"Rosales"},
+  {common:"American elm",scientific:"Ulmus americana var. americana",family:"Ulmaceae",order:"Rosales"},
   {common:"Chinese elm",scientific:"Ulmus parvifolia",family:"Ulmaceae",order:"Rosales"},
   {common:"Slippery elm",scientific:"Ulmus rubra",family:"Ulmaceae",order:"Rosales"},
   {common:"Farkleberry",scientific:"Vaccinium arboreum",family:"Ericaceae",order:"Ericales"},
@@ -1359,6 +1086,137 @@ document.addEventListener('keydown',e=>{
 });
 
 rebuildQuiz();
+
+// ── Mock Quiz ────────────────────────────────────────────────────────────────
+const PARKS = [
+  {name:"Carl Alwin Schenck Memorial Forest", short:"Schenck Forest",       lat:35.7953, lng:-78.7218, r:0.6},
+  {name:"Lake Johnson Park",                  short:"Lake Johnson",          lat:35.7627, lng:-78.6934, r:0.7},
+  {name:"Lake Raleigh (Centennial Campus)",   short:"Lake Raleigh",         lat:35.7715, lng:-78.6741, r:0.5},
+  {name:"Swift Creek Bluffs Nature Preserve", short:"Swift Creek Bluffs",   lat:35.7116, lng:-78.7053, r:0.6},
+  {name:"Historic Yates Mill County Park",    short:"Yates Mill",           lat:35.7134, lng:-78.6818, r:0.7},
+  {name:"Thomas G. Crowder Woodland Center",  short:"Crowder Woodland",     lat:35.7888, lng:-78.7000, r:0.5},
+  {name:"William B. Umstead State Park",      short:"Umstead State Park",   lat:35.8651, lng:-78.7575, r:2.0},
+  {name:"Durant Nature Preserve",             short:"Durant Preserve",      lat:35.8638, lng:-78.6378, r:0.7},
+  {name:"Horseshoe Farm Nature Preserve",     short:"Horseshoe Farm",       lat:35.8252, lng:-78.5466, r:0.6},
+  {name:"Blue Jay Point County Park",         short:"Blue Jay Point",       lat:35.9578, lng:-78.6900, r:0.7},
+  {name:"Lake Crabtree County Park",          short:"Lake Crabtree",        lat:35.8701, lng:-78.7878, r:0.8},
+  {name:"Falls Lake State Recreation Area",   short:"Falls Lake",           lat:35.9503, lng:-78.6973, r:2.0},
+  {name:"Clemmons Educational State Forest",  short:"Clemmons Forest",      lat:35.5667, lng:-78.8833, r:0.8},
+  {name:"Jordan Lake State Recreation Area",  short:"Jordan Lake",          lat:35.7308, lng:-79.0000, r:2.0},
+  {name:"Walnut Creek Wetland Park",          short:"Walnut Creek",         lat:35.7538, lng:-78.6344, r:0.5},
+  {name:"Dorothea Dix Park",                  short:"Dorothea Dix",         lat:35.7680, lng:-78.6534, r:0.6},
+  {name:"Reedy Creek Park & Preserve",        short:"Reedy Creek Park",     lat:35.8439, lng:-78.7425, r:0.7},
+  {name:"Anderson Point Park",                short:"Anderson Point",       lat:35.7903, lng:-78.5819, r:0.5},
+  {name:"Shelley Lake Park",                  short:"Shelley Lake",         lat:35.8434, lng:-78.6765, r:0.5},
+];
+
+let mockMode=false, mockPark=null, mockLoading=false;
+
+function openMockQuiz() {
+  if (!mySpecies.length) { alert('Add some species to your list first.'); return; }
+  document.getElementById('mockStatus').textContent = '';
+  document.getElementById('mockModal').classList.add('open');
+}
+function closeMockModal() { if(!mockLoading) document.getElementById('mockModal').classList.remove('open'); }
+
+function exitMockMode() {
+  mockMode=false; mockPark=null;
+  document.getElementById('mockBtn').classList.remove('active');
+  document.getElementById('mockBtn').textContent='🌳 Mock quiz';
+  document.getElementById('mockBanner').classList.remove('visible');
+  rebuildQuiz();
+}
+
+async function startMockQuiz() {
+  if (mockLoading) return;
+  mockLoading=true;
+  const btn=document.getElementById('mockStartBtn');
+  const status=document.getElementById('mockStatus');
+  btn.disabled=true; btn.textContent='Loading…';
+
+  const park = PARKS[Math.floor(Math.random()*PARKS.length)];
+  mockPark = park;
+  status.textContent = `Fetching observations at ${park.short}…`;
+
+  try {
+    const now = new Date();
+    const fmt = d => d.toISOString().slice(0,10);
+    const d60 = new Date(now); d60.setDate(d60.getDate()-60);
+    const d60ly = new Date(d60); d60ly.setFullYear(d60ly.getFullYear()-1);
+    const nowly = new Date(now); nowly.setFullYear(nowly.getFullYear()-1);
+
+    const base = `https://api.inaturalist.org/v1/observations?quality_grade=research&iconic_taxa=Plantae&lat=${park.lat}&lng=${park.lng}&radius=${park.r}&per_page=200&order=votes&order_by=votes`;
+    const [r1,r2] = await Promise.all([fetch(`${base}&d1=${fmt(d60)}&d2=${fmt(now)}`), fetch(`${base}&d1=${fmt(d60ly)}&d2=${fmt(nowly)}`)]);
+    const [j1,j2] = await Promise.all([r1.json(), r2.json()]);
+
+    // Count observations by genus+species
+    const counts = {};
+    for (const obs of [...(j1.results||[]),...(j2.results||[])]) {
+      const t = obs.taxon; if (!t) continue;
+      const parts = t.name.split(' ');
+      const key = parts.slice(0,2).join(' ');
+      counts[key] = (counts[key]||0)+1;
+    }
+
+    // Intersect with mySpecies
+    const scored = mySpecies.map(sp => {
+      const spKey = sp.scientific.split(' ').slice(0,2).join(' ');
+      const genus = sp.scientific.split(' ')[0];
+      // Exact genus+species match (full weight) or genus-only match (half)
+      const exact = counts[spKey] || 0;
+      const genusHit = Object.keys(counts).find(k=>k.split(' ')[0]===genus&&!counts[spKey]);
+      const score = exact > 0 ? exact : (genusHit ? counts[genusHit]*0.5 : 0);
+      return {sp, score};
+    }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score);
+
+    const quizSpecies = scored.slice(0,20).map(x=>x.sp);
+    const fallback = quizSpecies.length < 5;
+    const finalSpecies = fallback ? shuffle([...mySpecies]).slice(0,20) : quizSpecies;
+
+    document.getElementById('mockModal').classList.remove('open');
+    startMockRound(park, finalSpecies, fallback);
+  } catch(e) {
+    status.textContent = 'Could not load iNaturalist data. Check your connection and try again.';
+  }
+  btn.disabled=false; btn.textContent='Pick a random park';
+  mockLoading=false;
+}
+
+function startMockRound(park, species, fallback) {
+  mockMode=true;
+  document.getElementById('mockBtn').classList.add('active');
+  document.getElementById('mockBtn').textContent='✕ Exit mock';
+  document.getElementById('mockBanner').classList.add('visible');
+  document.getElementById('mockBannerName').textContent='📍 '+park.name;
+  document.getElementById('mockBannerInfo').textContent = fallback
+    ? `${species.length} questions (limited iNat data — using your full list)`
+    : `${species.length} most-observed species (last 60 days + prior year)`;
+  queue=shuffle([...species]);
+  current=0;score=0;total=0;streak=0;hintStage=0;missedAnimals=[];quizStartTime=Date.now();
+  nhScore=0;nhTotal=0;
+  document.getElementById('nhScoreDisplay').textContent='0';
+  document.getElementById('nhTotalDisplay').textContent='0';
+  document.getElementById('quizContent').style.display='block';
+  document.getElementById('emptyState').style.display='none';
+  buildFilterBar();
+  updateScorebar();
+  loadAnimal();
+}
 </script>
+
+<!-- Mock quiz modal -->
+<div class="mock-modal-bg" id="mockModal">
+  <div class="mock-modal">
+    <h2>🌳 Mock field quiz</h2>
+    <p style="font-size:13px;color:var(--text2);margin:10px 0 14px;line-height:1.6">
+      A random park near Raleigh will be selected and iNaturalist will be queried for the most recently observed plants there. Your quiz will focus on whichever of your studied species are most commonly found at that location right now.
+    </p>
+    <div id="mockStatus" class="mock-status"></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn" style="flex:1" onclick="closeMockModal()">Cancel</button>
+      <button class="btn btn-primary" id="mockStartBtn" style="flex:2" onclick="startMockQuiz()">Pick a random park</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
