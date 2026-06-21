@@ -310,12 +310,23 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--bg3);color:var(--te
       <!-- Tab: My species -->
       <div class="tab-pane" id="tab-mine">
         <div class="section-label">Species in your quiz (<span id="myCountTab">0</span>)</div>
+        <div id="myListControls" class="list-controls" style="display:none;margin-bottom:8px">
+          <span style="font-size:12px;color:var(--text3)"><span id="mySelCount"></span></span>
+          <div style="display:flex;gap:8px">
+            <button class="select-all-btn" id="mySelectAllBtn" onclick="myToggleSelectAll()">Select all</button>
+            <button class="select-all-btn" id="myRemoveSelBtn" onclick="myRemoveSelected()" style="color:var(--red)" disabled>Remove selected</button>
+          </div>
+        </div>
         <div class="my-list-wrap" id="myList"></div>
       </div>
     </div>
 
     <div class="panel-footer">
-      <span class="species-count-label"><span id="footerCount">0</span> species in quiz</span>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <span class="species-count-label"><span id="footerCount">0</span> species in quiz</span>
+        <button class="btn" style="font-size:11px;padding:4px 10px;flex:none" onclick="selectAllSpecies()">Select all</button>
+        <button class="btn" style="font-size:11px;padding:4px 10px;flex:none;color:var(--red);border-color:var(--red)" onclick="removeAllSpecies()">Remove all</button>
+      </div>
       <button class="done-btn" onclick="closePanel()">Done</button>
     </div>
   </div>
@@ -983,6 +994,18 @@ function toggleSelectVisible() {
   updateCounts();
 }
 
+function selectAllSpecies() {
+  MASTER.forEach(s => addSpecies(s));
+  renderMasterList(); updateCounts();
+}
+
+function removeAllSpecies() {
+  if (!mySpecies.length) return;
+  mySpecies = []; saveMy(); updateCounts();
+  renderMasterList();
+  if (activeTab === 'mine') renderMyList();
+}
+
 // ── iNaturalist tab ───────────────────────────────────────────────────────────
 async function doInatSearch() {
   const q = document.getElementById('inatSearch').value.trim();
@@ -1048,14 +1071,25 @@ async function inatAdd(btn, inatId, scientific, common) {
 }
 
 // ── My species tab ────────────────────────────────────────────────────────────
+let mySelectedSci = new Set();
+
 function renderMyList() {
   const list = document.getElementById('myList');
+  const controls = document.getElementById('myListControls');
   if (!mySpecies.length) {
     list.innerHTML = '<div class="no-items">No species added yet</div>';
+    if (controls) controls.style.display = 'none';
     return;
   }
+  if (controls) controls.style.display = 'flex';
+  // Keep only valid selections
+  mySelectedSci = new Set([...mySelectedSci].filter(sci => mySpecies.some(s => s.scientific === sci)));
+  updateMyListControls();
   list.innerHTML = mySpecies.map(s => `
-    <div class="my-item">
+    <label class="my-item" style="cursor:pointer">
+      <input type="checkbox" ${mySelectedSci.has(s.scientific) ? 'checked' : ''}
+        style="width:15px;height:15px;accent-color:var(--green);flex-shrink:0;cursor:pointer"
+        onchange="toggleMySelect('${s.scientific.replace(/'/g,"\\'")}', this.checked)">
       <div style="flex:1;min-width:0">
         <div class="my-common">${s.common || s.scientific}</div>
         <div class="my-sci">${s.scientific}</div>
@@ -1064,10 +1098,43 @@ function renderMyList() {
           ${s.order?`<span class="tag">${s.order}</span>`:''}
         </div>
       </div>
-      <button class="remove-btn" onclick="removeMy('${s.scientific.replace(/'/g,"\\'")}')">×</button>
-    </div>`).join('');
+      <button class="remove-btn" onclick="event.preventDefault();removeMy('${s.scientific.replace(/'/g,"\\'")}')">×</button>
+    </label>`).join('');
 }
+
+function toggleMySelect(sci, checked) {
+  if (checked) mySelectedSci.add(sci); else mySelectedSci.delete(sci);
+  updateMyListControls();
+}
+
+function updateMyListControls() {
+  const allChecked = mySpecies.length > 0 && mySpecies.every(s => mySelectedSci.has(s.scientific));
+  const selBtn = document.getElementById('mySelectAllBtn');
+  const remBtn = document.getElementById('myRemoveSelBtn');
+  if (selBtn) selBtn.textContent = allChecked ? 'Deselect all' : 'Select all';
+  if (remBtn) remBtn.disabled = mySelectedSci.size === 0;
+  const countEl = document.getElementById('mySelCount');
+  if (countEl) countEl.textContent = mySelectedSci.size > 0 ? `${mySelectedSci.size} selected` : '';
+}
+
+function myToggleSelectAll() {
+  const allChecked = mySpecies.every(s => mySelectedSci.has(s.scientific));
+  if (allChecked) mySelectedSci.clear();
+  else mySpecies.forEach(s => mySelectedSci.add(s.scientific));
+  renderMyList();
+}
+
+function myRemoveSelected() {
+  if (!mySelectedSci.size) return;
+  mySpecies = mySpecies.filter(s => !mySelectedSci.has(s.scientific));
+  mySelectedSci.clear();
+  saveMy(); updateCounts();
+  renderMyList();
+  renderMasterList();
+}
+
 function removeMy(sci) {
+  mySelectedSci.delete(sci);
   removeSpecies(sci); renderMyList(); updateCounts();
   if (activeTab === 'list') renderMasterList();
 }
