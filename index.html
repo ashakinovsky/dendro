@@ -326,11 +326,11 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--bg3);color:var(--te
 const MASTER = [
   {common:"Fraser fir",scientific:"Abies fraseri",family:"Pinaceae",order:"Pinales"},
   {common:"Southern sugar maple",scientific:"Acer floridanum",family:"Sapindaceae",order:"Sapindales"},
-  {common:"Boxelder",scientific:"Acer negundo",family:"Sapindaceae",order:"Sapindales"},
+  {common:"Boxelder",scientific:"Acer negundo var. negundo",family:"Sapindaceae",order:"Sapindales"},
   {common:"Japanese maple",scientific:"Acer palmatum",family:"Sapindaceae",order:"Sapindales"},
   {common:"Red maple",scientific:"Acer rubrum var. rubrum",family:"Sapindaceae",order:"Sapindales"},
   {common:"Silver maple",scientific:"Acer saccharinum",family:"Sapindaceae",order:"Sapindales"},
-  {common:"Buckeye",scientific:"Aesculus sylvatica",family:"Sapindaceae",order:"Sapindales"},
+  {common:"Buckeye",scientific:"Aesculus spp.",family:"Sapindaceae",order:"Sapindales"},
   {common:"Tree-of-heaven",scientific:"Ailanthus altissima",family:"Simaroubaceae",order:"Sapindales"},
   {common:"Mimosa",scientific:"Albizia julibrissin",family:"Fabaceae",order:"Fabales",natHist:{
     epithet:"\"Julibrissin\" is derived from the Persian \"gul-i abrisham,\" meaning \"silk flower,\" referring to its fluffy pink flowers",
@@ -345,7 +345,7 @@ const MASTER = [
   }},
   {common:"Hazel alder",scientific:"Alnus serrulata",family:"Betulaceae",order:"Fagales"},
   {common:"Serviceberry",scientific:"Amelanchier arborea",family:"Rosaceae",order:"Rosales",natHist:{
-    epithet:"tree-like (distinguishing it from shrubbier Amelanchier species)",
+    epithet:'"Arborea" means "tree-like," distinguishing it from shrubbier Amelanchier species',
     familyCommon:"Rose family",
     wildlifeUse:"One of the most selected Amelanchier species for birds and wildlife; fruit eaten by many songbirds and mammals",
     humanUse:"Sweet berries used in pies, jams, and baked goods, similar to blueberries",
@@ -373,7 +373,7 @@ const MASTER = [
     invasivePest:"Dogwood anthracnose: caused by the fungus Discula destructiva)"
   }},
   {common:"River birch",scientific:"Betula nigra",family:"Betulaceae",order:"Fagales",natHist:{
-    epithet:"Black (referring to the dark color of older bark)",
+    epithet:'"Nigra" means "black," referring to the dark color of older bark',
     familyCommon:"Birch family",
     wildlifeUse:"Seeds eaten by many songbirds and small mammals; deer browse the foliage",
     humanUse:"Sap can be fermented into birch beer or vinegar; Native Americans used it medicinally for colds and dysentery",
@@ -389,7 +389,7 @@ const MASTER = [
   {common:"Carolina allspice",scientific:"Calycanthus floridus",family:"Calycanthaceae",order:"Laurales"},
   {common:"Trumpet creeper",scientific:"Campsis radicans",family:"Bignoniaceae",order:"Lamiales"},
   {common:"Musclewood",scientific:"Carpinus caroliniana",family:"Betulaceae",order:"Fagales",natHist:{
-    epithet:"Of or from the Carolinas",
+    epithet:'"Caroliniana" means "of or from the Carolinas"',
     familyCommon:"Birch family",
     wildlifeUse:"Seeds, buds, and catkins eaten by songbirds, ruffed grouse, turkey, and squirrels; foliage browsed by deer and rabbits; heavily used by beavers for dam and lodge construction",
     humanUse:"Extremely hard, dense wood historically used for tool handles, levers, and wedges due to its strength",
@@ -405,7 +405,7 @@ const MASTER = [
   {common:"Pecan",scientific:"Carya illinoinensis",family:"Juglandaceae",order:"Fagales"},
   {common:"False shagbark hickory",scientific:"Carya ovalis",family:"Juglandaceae",order:"Fagales"},
   {common:"Shagbark hickory",scientific:"Carya ovata",family:"Juglandaceae",order:"Fagales",natHist:{
-    epithet:"Egg-shaped (referring to the shape of the nut)",
+    epithet:'"Ovata" means "egg-shaped," referring to the shape of the nut',
     familyCommon:"Walnut family",
     wildlifeUse:"Nuts eaten by raccoons, white-tailed deer, black bears, foxes, and other wildlife; shaggy bark provides roosting habitat for bats",
     humanUse:"Nuts were a staple food for Native Americans; wood used for tool handles, wheel spokes, and bow-making; wood smoke used to flavor meats (hickory-smoked bacon and ham)",
@@ -425,7 +425,7 @@ const MASTER = [
   {common:"Dwarf hackberry",scientific:"Celtis pumila",family:"Cannabaceae",order:"Rosales"},
   {common:"Buttonbush",scientific:"Cephalanthus occidentalis",family:"Rubiaceae",order:"Gentianales"},
   {common:"Eastern redbud",scientific:"Cercis canadensis",family:"Fabaceae",order:"Fabales",natHist:{
-    epithet:"Of or from Canada (referring to part of its native range)",
+    epithet:'"Canadensis" means "of or from Canada," referring to part of its native range',
     familyCommon:"Legume (pea/bean) family",
     wildlifeUse:"Important early-season nectar source for native bees; deer browse the twigs and seed pods, especially in winter; squirrels and chipmunks cache and disperse seeds",
     humanUse:"Flowers and young pods are edible, sometimes eaten raw or fried; Native Americans used bark for food and medicine",
@@ -440,10 +440,10 @@ const MASTER = [
   {common:"Kentucky yellowwood",scientific:"Cladrastis kentukea",family:"Fabaceae",order:"Fabales"},
   {common:"Sweet pepperbush",scientific:"Clethra alnifolia",family:"Clethraceae",order:"Ericales"},
   {common:"American hazelnut",scientific:"Corylus americana",family:"Betulaceae",order:"Fagales"},
-  {common:"Hawthorn",scientific:"Crataegus phaenopyrum",family:"Rosaceae",order:"Rosales"},
+  {common:"Hawthorn",scientific:"Crataegus spp.",family:"Rosaceae",order:"Rosales"},
   {common:"Swamp cyrilla",scientific:"Cyrilla racemiflora",family:"Cyrillaceae",order:"Ericales"},
   {common:"Persimmon",scientific:"Diospyros virginiana",family:"Ebenaceae",order:"Ericales",natHist:{
-    epithet:"Of or from Virginia; the genus name Diospyros means \"fruit of the gods\" in Greek",
+    epithet:'"Virginiana" means "of or from Virginia"; the genus name Diospyros means "fruit of the gods" in Greek',
     familyCommon:"Ebony family",
     wildlifeUse:"Fruit is eaten heavily by deer, raccoons, opossums, foxes, turkeys, and songbirds, especially after fall frost",
     humanUse:"Ripe fruit used in puddings, pies, and baked goods; unripe fruit is extremely astringent and inedible",
@@ -458,7 +458,7 @@ const MASTER = [
   {common:"Autumn olive",scientific:"Elaeagnus umbellata",family:"Elaeagnaceae",order:"Rosales"},
   {common:"Strawberry bush",scientific:"Euonymus americanus",family:"Celastraceae",order:"Celastrales"},
   {common:"American beech",scientific:"Fagus grandifolia",family:"Fagaceae",order:"Fagales",natHist:{
-    epithet:"Large-leaved (grandis = large, folium = leaf)",
+    epithet:'"Grandifolia" means "large-leaved" (grandis = large, folium = leaf)',
     familyCommon:"Beech family",
     wildlifeUse:"Nutlets are an important mast food source for songbirds, game birds, bears, deer, squirrels, and other mammals; Porcupines eat inner bark",
     native:"Native",
@@ -470,8 +470,7 @@ const MASTER = [
     invasivePest:"Beech bark disease (beech scale insect + Neonectria fungus)"
   }},
   {common:"White ash",scientific:"Fraxinus americana",family:"Oleaceae",order:"Lamiales",natHist:{
-    epithet:"Of or from America",
-    familyCommon:"Olive family",
+    epithet:'"Americana" means "of or from America"',
     wildlifeUse:"Seeds (samaras) eaten by birds like finches and cardinals; cavities in older trees used by woodpeckers and owls",
     humanUse:"Historically used for baseball bats, tool handles, oars, and furniture due to strength and flexibility",
     medicinalUse:"Bark has been used in folk medicine as a tonic/astringent, though not a major modern medicinal species",
@@ -489,13 +488,13 @@ const MASTER = [
   {common:"Ginkgo",scientific:"Ginkgo biloba",family:"Ginkgoaceae",order:"Ginkgoales"},
   {common:"Honey locust",scientific:"Gleditsia triacanthos",family:"Fabaceae",order:"Fabales"},
   {common:"Kentucky coffeetree",scientific:"Gymnocladus dioicus",family:"Fabaceae",order:"Fabales"},
-  {common:"Witch hazel",scientific:"Hamamelis virginiana",family:"Hamamelidaceae",order:"Saxifragales"},
+  {common:"Witch hazel",scientific:"Hamamelis virginiana var. virginiana",family:"Hamamelidaceae",order:"Saxifragales"},
   {common:"English ivy",scientific:"Hedera helix var. helix",family:"Araliaceae",order:"Apiales"},
   {common:"Leyland cypress",scientific:"Hesperotropsis leylandii",family:"Cupressaceae",order:"Pinales"},
   {common:"Oakleaf hydrangea",scientific:"Hydrangea quercifolia",family:"Hydrangeaceae",order:"Cornales"},
   {common:"Possumhaw",scientific:"Ilex decidua",family:"Aquifoliaceae",order:"Aquifoliales"},
   {common:"American holly",scientific:"Ilex opaca",family:"Aquifoliaceae",order:"Aquifoliales",natHist:{
-    epithet:"\"shaded\" or \"opaque,\" likely referring to its dull (non-glossy) leaf surface compared to other hollies",
+    epithet:'"Opaca" means "shaded" or "opaque," referring to its dull (non-glossy) leaf surface compared to other hollies',
     familyCommon:"Holly family",
     wildlifeUse:"Berries eaten by at least 18 bird species including cedar waxwings and American goldfinches, which strip entire trees in winter flocks; also eaten by deer and small mammals",
     humanUse:"Popular ornamental and Christmas decoration; white wood used in furniture inlays, woodworking, and carvings",
@@ -511,7 +510,7 @@ const MASTER = [
   {common:"Virginia willow",scientific:"Itea virginica",family:"Iteaceae",order:"Saxifragales"},
   {common:"Butternut",scientific:"Juglans cinerea",family:"Juglandaceae",order:"Fagales"},
   {common:"Black walnut",scientific:"Juglans nigra",family:"Juglandaceae",order:"Fagales",natHist:{
-    epithet:"Black (referring to the dark bark and nuts); the genus name Juglans comes from Latin \"Jovis glans\" meaning \"Jupiter's acorn\"",
+    epithet:'"Nigra" means "black," referring to the dark bark and nuts; the genus name Juglans comes from Latin "Jovis glans" meaning "Jupiter\'s acorn"',
     familyCommon:"Walnut family",
     wildlifeUse:"Nuts are a favorite food of squirrels, which are among the few animals strong enough to gnaw through the hard shells; also a larval host for luna moths and regal moths",
     humanUse:"Highly prized for furniture, gunstocks, and veneer; nuts used for food, and husks used to make a black/brown dye",
@@ -527,7 +526,7 @@ const MASTER = [
   {common:"Mountain laurel",scientific:"Kalmia latifolia",family:"Ericaceae",order:"Ericales"},
   {common:"Lespedeza bicolor",scientific:"Lespedeza bicolor",family:"Fabaceae",order:"Fabales"},
   {common:"Sericea lespedeza",scientific:"Lespedeza cuneata",family:"Fabaceae",order:"Fabales",natHist:{
-    epithet:"wedge-shaped (referring to its narrow, tapering leaflets); the common name \"sericea\" comes from the former species name meaning \"silky,\" referring to its hairy leaves",
+    epithet:'"Cuneata" means "wedge-shaped," referring to its narrow, tapering leaflets; the common name "sericea" comes from a former species name meaning "silky," referring to its hairy leaves',
     familyCommon:"Legume (pea/bean) family",
     wildlifeUse:"Very limited value to wildlife despite being planted historically for quail; tannins make it unpalatable to grazers and its seeds offer poor nutrition for game birds",
     humanUse:"Originally introduced for erosion control, mine reclamation, and livestock forage, though it proved a poor forage choice",
@@ -541,7 +540,7 @@ const MASTER = [
   {common:"Chinese privet",scientific:"Ligustrum sinense",family:"Oleaceae",order:"Lamiales"},
   {common:"Spicebush",scientific:"Lindera benzoin",family:"Lauraceae",order:"Laurales"},
   {common:"Sweetgum",scientific:"Liquidambar styraciflua",family:"Altingiaceae",order:"Saxifragales",natHist:{
-    epithet:"\"flowing with storax\" (a fragrant resin), referring to the aromatic gum that exudes from wounds in the bark",
+    epithet:'"Styraciflua" means "flowing with storax" (a fragrant resin), referring to the aromatic gum that exudes from wounds in the bark',
     familyCommon:"Altingia family",
     wildlifeUse:"Small winged seeds (held in spiky \"gumball\" fruits) eaten by squirrels, chipmunks, and birds such as doves and finches; black bears den in hollows; inner bark eaten by beavers",
     humanUse:"Resin historically used for chewing gum, incense, perfumes, and folk medicine; first in number of acres of hardwood plantation",
@@ -553,7 +552,7 @@ const MASTER = [
     woodUse:"One of the most common commercial hardwoods in the U.S.; used for lumber, railroad ries, furniture, panelling, plywood, and pulpwood"
   }},
   {common:"Tulip poplar",scientific:"Liriodendron tulipifera var. tulipifera",family:"Magnoliaceae",order:"Magnoliales",natHist:{
-    epithet:"Tulip-bearing (referring to its large tulip-shaped flowers)",
+    epithet:'"Tulipifera" means "tulip-bearing," referring to its large tulip-shaped flowers',
     familyCommon:"Magnolia family",
     wildlifeUse:"Flowers attract hummingbirds and pollinators; nesting tree for birds; seeds eaten by squirrels and birds",
     humanUse:"Native Americans hollowed out trunks to make dugout canoes; wood used for furniture, crates, musical instruments, and pulpwood",
@@ -567,7 +566,7 @@ const MASTER = [
   {common:"Japanese honeysuckle",scientific:"Lonicera japonica",family:"Caprifoliaceae",order:"Dipsacales"},
   {common:"Osage orange",scientific:"Maclura pomifera",family:"Moraceae",order:"Rosales"},
   {common:"Southern magnolia",scientific:"Magnolia grandiflora",family:"Magnoliaceae",order:"Magnoliales",natHist:{
-    epithet:"large-flowered",
+    epithet:'"Grandiflora" means "large-flowered"',
     familyCommon:"Magnolia family",
     wildlifeUse:"Bright red seeds, high in fat, eaten by squirrels, opossums, turkeys, quail, and many songbirds; beetles are key pollinators",
     humanUse:"Widely planted ornamental shade tree; dried leaves used by florists in decorations; bark historically used by the Choctaw for medicinal skin washes",
@@ -579,16 +578,16 @@ const MASTER = [
     woodUse:"Limited commercial use; occasionally used for furniture and veneer"
   }},
   {common:"Umbrella magnolia",scientific:"Magnolia tripetala",family:"Magnoliaceae",order:"Magnoliales"},
-  {common:"Sweetbay magnolia",scientific:"Magnolia virginiana",family:"Magnoliaceae",order:"Magnoliales"},
+  {common:"Sweetbay magnolia",scientific:"Magnolia virginiana var. virginiana",family:"Magnoliaceae",order:"Magnoliales"},
   {common:"Chinaberry",scientific:"Melia azedarach",family:"Meliaceae",order:"Sapindales"},
   {common:"Dawn redwood",scientific:"Metasequoia glyptostroboides",family:"Cupressaceae",order:"Pinales"},
   {common:"Japanese stiltgrass",scientific:"Microstegium vimineum",family:"Poaceae",order:"Poales"},
   {common:"Wax myrtle",scientific:"Morella cerifera",family:"Myricaceae",order:"Fagales"},
   {common:"White mulberry",scientific:"Morus alba",family:"Moraceae",order:"Rosales"},
   {common:"Red mulberry",scientific:"Morus rubra",family:"Moraceae",order:"Rosales"},
-  {common:"Muscadine grape",scientific:"Muscadinia rotundifolia",family:"Vitaceae",order:"Vitales"},
+  {common:"Muscadine grape",scientific:"Muscadinia rotundifolia var. rotundifolia",family:"Vitaceae",order:"Vitales"},
   {common:"Blackgum",scientific:"Nyssa sylvatica",family:"Nyssaceae",order:"Cornales",natHist:{
-    epithet:"Of/from the woods; the genus Nyssa is named for a Greek water nymph",
+    epithet:'"Sylvatica" means "of the woods"; the genus Nyssa is named for a Greek water nymph',
     familyCommon:"Tupelo family",
     wildlifeUse:"Fat-rich fruit is highly attractive to migrating and resident songbirds (thrushes, woodpeckers, waxwings), as well as black bears, foxes, and squirrels; flowers are a major nectar source for bees",
     humanUse:"Tupelo honey, made from its nectar, is a prized specialty honey",
@@ -600,7 +599,7 @@ const MASTER = [
     woodUse:"Limited commercial use due to twisted, interlocking grain that resists splitting; occasionally used for pallets, crates, and veneer"
   }},
   {common:"Eastern hophornbeam",scientific:"Ostrya virginiana",family:"Betulaceae",order:"Fagales",natHist:{
-    epithet:"Of or from Virginia (referencing the colony where it was first described)",
+    epithet:'"Virginiana" means "of or from Virginia," referencing the colony where it was first described',
     familyCommon:"Birch family",
     wildlifeUse:"Buds and catkins are important winter food for ruffed grouse and wild turkey, comparable in value to aspen and birch; also eaten by squirrels, cottontails, and deer",
     humanUse:"Common name \"ironwood\" reflects its extremely hard, dense wood, historically used to make tool handles and levers",
@@ -612,7 +611,7 @@ const MASTER = [
     woodUse:"Extremely hard, dense wood used for tool handles, mallets, and other items needing durability; too small for commercial lumber"
   }},
   {common:"Sourwood",scientific:"Oxydendrum arboreum",family:"Ericaceae",order:"Ericales",natHist:{
-    epithet:"Tree-like or \"of a tree\" in Latin; the genus name Oxydendrum means \"sour tree\" (Greek oxys = acid)",
+    epithet:'"Arboreum" means "tree-like" or "of a tree"; the genus name Oxydendrum means "sour tree" in Greek (oxys = acid)',
     familyCommon:"Heath family",
     wildlifeUse:"Flowers are a major nectar source for bees; deer browse the young shoots; provides small den cavities for bears",
     humanUse:"Sourwood honey, made from its nectar, is a prized regional delicacy; leaves were historically chewed by travelers to relieve thirst due to their sour taste",
@@ -623,7 +622,7 @@ const MASTER = [
     woodUse:"Limited commercial value; occasionally used for tool handles and as fuelwood"
   }},
   {common:"Virginia creeper",scientific:"Parthenocissus quinquefolia",family:"Vitaceae",order:"Vitales",natHist:{
-    epithet:"Five-leaved (referring to its five palmate leaflets); the genus name Parthenocissus means \"virgin ivy\" in Greek",
+    epithet:'"Quinquefolia" means "five-leaved," referring to its five palmate leaflets; the genus name Parthenocissus means "virgin ivy" in Greek',
     familyCommon:"Grape family",
     wildlifeUse:"Berries are a favorite food of songbirds, woodpeckers, deer, and squirrels, especially in fall/winter",
     humanUse:"Used ornamentally as a climbing vine or ground cover for its brilliant red fall color",
@@ -655,7 +654,7 @@ const MASTER = [
   {common:"Pitch pine",scientific:"Pinus rigida",family:"Pinaceae",order:"Pinales"},
   {common:"Pond pine",scientific:"Pinus serotina",family:"Pinaceae",order:"Pinales"},
   {common:"Eastern white pine",scientific:"Pinus strobus",family:"Pinaceae",order:"Pinales",natHist:{
-    epithet:"Greek word for \"pine cone\"",
+    epithet:'"Strobus" comes from the Greek word for "pine cone"',
     familyCommon:"Pine family",
     wildlifeUse:"Seeds eaten by songbirds (chickadees, nuthatches, crossbills) and mammals (squirrels, deer, snowshoe hares); large branches used as nesting/resting sites by bald eagles",
     humanUse:"Colonial-era: grown in lake-states and Northeast & ship masts were cut from its tall, straight trunks; Pine Tree Riot; sometimes used as Christmas trees; not fire tolerant",
@@ -681,7 +680,7 @@ const MASTER = [
   {common:"Virginia pine",scientific:"Pinus virginiana",family:"Pinaceae",order:"Pinales"},
   {common:"Chinese pistache",scientific:"Pistacia chinensis",family:"Anacardiaceae",order:"Sapindales"},
   {common:"Sycamore",scientific:"Platanus occidentalis",family:"Platanaceae",order:"Proteales",natHist:{
-    epithet:"Western (eferring to the Western Hemisphere relative to the original Old World plane tree)",
+    epithet:'"Occidentalis" means "western," referring to the Western Hemisphere relative to the original Old World plane tree',
     familyCommon:"Plane-tree family",
     wildlifeUse:"Hollow trunks provide den sites for raccoons, opossums, and wood ducks; seeds feed songbirds through the winter",
     humanUse:"Native Americans hollowed out trunks for dugout canoes; widely planted as a shade tree for its mottled, exfoliating bark",
@@ -695,7 +694,7 @@ const MASTER = [
   {common:"Eastern cottonwood",scientific:"Populus deltoides ssp. deltoides",family:"Salicaceae",order:"Malpighiales"},
   {common:"Carolina cherry laurel",scientific:"Prunus caroliniana",family:"Rosaceae",order:"Rosales"},
   {common:"Black cherry",scientific:"Prunus serotina",family:"Rosaceae",order:"Rosales",natHist:{
-    epithet:"Late (referring to its later bloom time compared to other native cherries)",
+    epithet:'"Serotina" means "late," referring to its later bloom time compared to other native cherries',
     familyCommon:"Rose family",
     wildlifeUse:"Fruit eaten by over 30 species of birds and many mammals; host plant for eastern tiger swallowtail and other butterflies/moths; (note: leaves, bark, and seeds contain cyanogenic compounds toxic to livestock and humans if ingested)",
     humanUse:"Fruit used in jellies, jams, pies, and wine; inner bark historically used in cough syrups",
@@ -708,11 +707,11 @@ const MASTER = [
 }},
   {common:"Rocky Mountain Douglas-fir",scientific:"Pseudotsuga menziesii var. glauca",family:"Pinaceae",order:"Pinales"},
   {common:"Coast Douglas-fir",scientific:"Pseudotsuga menziesii var. menziesii",family:"Pinaceae",order:"Pinales"},
-  {common:"Kudzu",scientific:"Pueraria montana",family:"Fabaceae",order:"Fabales"},
+  {common:"Kudzu",scientific:"Pueraria montana var. lobata",family:"Fabaceae",order:"Fabales"},
   {common:"Callery pear",scientific:"Pyrus calleryana",family:"Rosaceae",order:"Rosales"},
   {common:"Sawtooth oak",scientific:"Quercus acutissima",family:"Fagaceae",order:"Fagales"},
   {common:"White oak",scientific:"Quercus alba",family:"Fagaceae",order:"Fagales",natHist:{
-    epithet:"White (color of bark, which appears shaggy in larger trees)",
+    epithet:'"Alba" means "white," referring to the light ash-gray bark; the common name also references the pale color of the finished wood',
     familyCommon:"Beech family",
     wildlifeUse:"Acorns are eaten by wood ducks, game birds, bears, deer, squirrels, etc.",
     native:"Native",
@@ -723,7 +722,7 @@ const MASTER = [
   }},
   {common:"Swamp white oak",scientific:"Quercus bicolor",family:"Fagaceae",order:"Fagales"},
   {common:"Scarlet oak",scientific:"Quercus coccinea",family:"Fagaceae",order:"Fagales",natHist:{
-    epithet:"Scarlet (leaves)", 
+    epithet:'"Coccinea" means "scarlet," referring to its brilliant red fall foliage',
     familyCommon:"Beech family", 
     wildlifeUse:"Acorns are valuable for wildlife but selected less due to higher concentration of tannins",  
     native:"Native", 
@@ -736,7 +735,7 @@ const MASTER = [
   {common:"Southern red oak",scientific:"Quercus falcata",family:"Fagaceae",order:"Fagales"},
   {common:"Laurel oak",scientific:"Quercus laurifolia",family:"Fagaceae",order:"Fagales"},
   {common:"Overcup oak",scientific:"Quercus lyrata",family:"Fagaceae",order:"Fagales"},
-  {common:"Blackjack oak",scientific:"Quercus marilandica",family:"Fagaceae",order:"Fagales"},
+  {common:"Blackjack oak",scientific:"Quercus marilandica var. marilandica",family:"Fagaceae",order:"Fagales"},
   {common:"Swamp chestnut oak",scientific:"Quercus michauxii",family:"Fagaceae",order:"Fagales"},
   {common:"Chestnut oak",scientific:"Quercus montana",family:"Fagaceae",order:"Fagales"},
   {common:"Water oak",scientific:"Quercus nigra",family:"Fagaceae",order:"Fagales"},
@@ -764,11 +763,11 @@ const MASTER = [
   {common:"Winged sumac",scientific:"Rhus copallinum",family:"Anacardiaceae",order:"Sapindales"},
   {common:"Black locust",scientific:"Robinia pseudoacacia",family:"Fabaceae",order:"Fabales"},
   {common:"Multiflora rose",scientific:"Rosa multiflora",family:"Rosaceae",order:"Rosales"},
-  {common:"Blackberry",scientific:"Rubus occidentalis",family:"Rosaceae",order:"Rosales"},
+  {common:"Blackberry",scientific:"Rubus spp.",family:"Rosaceae",order:"Rosales"},
   {common:"Black willow",scientific:"Salix nigra",family:"Salicaceae",order:"Malpighiales"},
   {common:"American elderberry",scientific:"Sambucus canadensis",family:"Adoxaceae",order:"Dipsacales"},
   {common:"Sassafras",scientific:"Sassafras albidum",family:"Lauraceae",order:"Laurales",natHist:{
-    epithet:"White-ish (referring to the pale undersides of the leaves)",
+    epithet:'"Albidum" means "whitish," referring to the pale undersides of the leaves',
     familyCommon:"Laurel family",
     wildlifeUse:"Host plant for swallowtail butterfly caterpillars; songbirds eat fruit; deer browse",
     humanUse:"Roots historically used to flavor root beer and tea; dried leaves ground into filé powder used to thicken gumbo",
@@ -783,7 +782,7 @@ const MASTER = [
   }},
   {common:"Coast redwood",scientific:"Sequoia sempervirens",family:"Cupressaceae",order:"Pinales"},
   {common:"Giant sequoia",scientific:"Sequoiadendron giganteum",family:"Cupressaceae",order:"Pinales"},
-  {common:"Greenbrier",scientific:"Smilax rotundifolia",family:"Smilacaceae",order:"Liliales"},
+  {common:"Roundleaf greenbrier",scientific:"Smilax rotundifolia",family:"Smilacaceae",order:"Liliales"},
   {common:"American bladdernut",scientific:"Staphylea trifolia",family:"Staphyleaceae",order:"Crossosomatales"},
   {common:"Bigleaf snowbell",scientific:"Styrax grandifolius",family:"Styracaceae",order:"Ericales"},
   {common:"Silky dogwood",scientific:"Swida amomum",family:"Cornaceae",order:"Cornales"},
@@ -792,7 +791,7 @@ const MASTER = [
   {common:"Bald cypress",scientific:"Taxodium distichum",family:"Cupressaceae",order:"Pinales"},
   {common:"Northern white cedar",scientific:"Thuja occidentalis",family:"Cupressaceae",order:"Pinales"},
   {common:"Poison ivy",scientific:"Toxicodendron radicans var. radicans",family:"Anacardiaceae",order:"Sapindales",natHist:{
-    epithet:"Rooting (referring to the aerial roots it uses to climb); the genus name Toxicodendron means \"poison tree\" in Greek",
+    epithet:'"Radicans" means "rooting," referring to the aerial roots it uses to climb; the genus name Toxicodendron means "poison tree" in Greek',
     familyCommon:"Cashew/sumac family",
     wildlifeUse:"Berries are an important fall/winter food source for over 60 bird species (birds are immune to urushiol); deer browse the foliage without ill effect",
     humanUse:"Despite being widely removed by humans due to skin irritation, it is left undisturbed in natural areas to support wildlife",
@@ -803,7 +802,7 @@ const MASTER = [
   }},
   {common:"Chinese tallow tree",scientific:"Triadica sebifera",family:"Euphorbiaceae",order:"Malpighiales"},
   {common:"Eastern hemlock",scientific:"Tsuga canadensis",family:"Pinaceae",order:"Pinales",natHist:{
-    epithet:"Of/from Canada (referring to where the earliest specimens were collected for description in Europe)",
+    epithet:'"Canadensis" means "of or from Canada," referring to where the earliest specimens were collected for description in Europe',
     familyCommon:"Pine family",
     wildlifeUse:"Dense evergreen boughs provide critical winter cover and bedding sites for deer; seeds eaten by chickadees and small mammals; porcupines chew the inner bark",
     humanUse:"Bark was historically a major commercial source of tannin used in leather tanning",
@@ -818,7 +817,7 @@ const MASTER = [
   {common:"Carolina hemlock",scientific:"Tsuga caroliniana",family:"Pinaceae",order:"Pinales"},
   {common:"Western hemlock",scientific:"Tsuga heterophylla",family:"Pinaceae",order:"Pinales"},
   {common:"Winged elm",scientific:"Ulmus alata",family:"Ulmaceae",order:"Rosales",natHist:{
-    epithet:"Winged (referring to the distinctive corky wing-like ridges on its twigs and branches)",
+    epithet:'"Alata" means "winged," referring to the distinctive corky wing-like ridges on its twigs and branches',
     familyCommon:"Elm family",
     wildlifeUse:"Seeds eaten by birds and small mammals; foliage browsed by rabbits; provides nesting cover for insectivorous birds",
     humanUse:"Fibrous inner bark was historically twisted into rope for baling cotton; common name \"Wahoo\" comes from the Creek language",
@@ -831,7 +830,7 @@ const MASTER = [
     invasivePest:"Dutch elm disease (though notably more resistant than American elm)"
 }},
   {common:"American elm",scientific:"Ulmus americana var. americana",family:"Ulmaceae",order:"Rosales",natHist:{
-  epithet:"Of/from America",
+  epithet:'"Americana" means "of or from America"',
   familyCommon:"Elm family",
   wildlifeUse:"Seeds and buds eaten by birds and small mammals; provides nesting and cavity habitat",
   humanUse:"Once one of the most widely planted street and shade trees in the U.S. due to its graceful vase-shaped form",
