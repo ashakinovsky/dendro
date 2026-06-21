@@ -855,8 +855,19 @@ const MASTER = [
 
 // ── Storage ───────────────────────────────────────────────────────────────────
 const STORAGE_KEY = 'dendro_myspecies_v2';
-function loadMy() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e) { return []; } }
-function saveMy() { localStorage.setItem(STORAGE_KEY, JSON.stringify(mySpecies)); }
+
+function loadMy() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    // Enrich each stored entry with live MASTER data (natHist, corrected common name, etc.)
+    // This fixes species saved before natHist was added, and fixes stale common names
+    return stored.map(s => {
+      const master = MASTER.find(m => m.scientific === s.scientific);
+      return master ? { ...master } : s;
+    });
+  } catch(e) { return []; }
+}
+function saveMy() { localStorage.setItem(STORAGE_KEY, JSON.stringify(mySpecies.map(s => ({common:s.common,scientific:s.scientific,family:s.family,order:s.order})))); }
 let mySpecies = loadMy();
 
 // ── Photo cache ───────────────────────────────────────────────────────────────
