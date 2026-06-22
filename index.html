@@ -60,12 +60,24 @@ body{font-family:'Source Sans 3',sans-serif;background:var(--bg3);color:var(--te
 .mock-park-banner.visible{display:flex}
 .mock-park-name{font-size:13px;font-weight:600;color:var(--green-dark)}
 .mock-park-info{font-size:11px;color:var(--green-dark);opacity:0.75;text-align:right}
-.mock-modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:300;align-items:center;justify-content:center;padding:20px}
+.mock-modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:300;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
 .mock-modal-bg.open{display:flex}
-.mock-modal{background:var(--bg);border-radius:var(--radius-lg);border:0.5px solid var(--border);padding:28px 24px;max-width:440px;width:100%;text-align:center}
+.mock-modal{background:var(--bg);border-radius:var(--radius-lg);border:0.5px solid var(--border);padding:28px 24px;max-width:520px;width:100%;text-align:center;margin:auto}
 .mock-modal h2{font-family:'Playfair Display',serif;font-size:20px;margin-bottom:10px;color:var(--text)}
-.mock-modal p{font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.6}
+.mock-modal p{font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.6;text-align:left}
 .mock-status{font-size:13px;color:var(--text3);min-height:20px;margin-bottom:12px}
+.mock-mode-tabs{display:flex;border:0.5px solid var(--border2);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.mock-mode-tab{flex:1;padding:8px;border:none;background:var(--bg);color:var(--text2);font-size:13px;font-family:'Source Sans 3',sans-serif;font-weight:600;cursor:pointer;transition:background 0.15s;border-right:0.5px solid var(--border2)}
+.mock-mode-tab:last-child{border-right:none}
+.mock-mode-tab.active{background:var(--green);color:#fff}
+.park-list{max-height:220px;overflow-y:auto;border:0.5px solid var(--border);border-radius:var(--radius);margin-bottom:14px;text-align:left}
+.park-item{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:0.5px solid var(--border);cursor:pointer;transition:background 0.1s}
+.park-item:last-child{border-bottom:none}
+.park-item:hover{background:var(--bg2)}
+.park-item.selected{background:var(--green-light)}
+.park-item input[type=radio]{accent-color:var(--green);flex-shrink:0}
+.park-item-name{font-size:13px;font-weight:600;color:var(--text)}
+.park-item-short{font-size:11px;color:var(--text3)}
 .scorebar{display:flex;gap:8px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
 .score-pill{background:var(--bg2);border:0.5px solid var(--border);border-radius:20px;padding:5px 14px;font-size:13px;color:var(--text2)}
 .score-pill span{font-weight:600;color:var(--text)}
@@ -443,7 +455,18 @@ const MASTER = [
   {common:"Northern catalpa",scientific:"Catalpa speciosa",family:"Bignoniaceae",order:"Lamiales"},
   {common:"Deodar cedar",scientific:"Cedrus deodara",family:"Pinaceae",order:"Pinales"},
   {common:"Oriental bittersweet",scientific:"Celastrus orbiculatus",family:"Celastraceae",order:"Celastrales"},
-  {common:"Sugarberry",scientific:"Celtis laevigata",family:"Cannabaceae",order:"Rosales"},
+  {common:"Sugarberry",scientific:"Celtis laevigata",family:"Cannabaceae",order:"Rosales",natHist:{
+    epithet:'"Laevigata" means "smooth," referring to its mostly smooth leaf margins and bark compared to other hackberries',
+    familyCommon:"Hemp family",
+    wildlifeUse:'Sole larval host for the hackberry emperor, tawny emperor, and snout butterflies; fruit eaten by many songbirds and mammals; one of the best native trees for neotropical migrants in fall',
+    humanUse:'Small, sweet edible fruit resembling dates in flavor — historically eaten raw by Native Americans; common shade and street tree tolerant of poor urban soils',
+    native:"Native",
+    seedDispersal:"Birds and mammals (fruits eaten and seeds excreted or cached)",
+    fruitType:"Drupe (small, dark purple to black when ripe)",
+    monoeciousDioecious:"Monoecious (mostly; some polygamo-monoecious)",
+    floweringSeason:"Spring (April-May), with or just after leaf emergence; flowers are inconspicuous",
+    woodUse:"Heavy wood occasionally used for furniture and boxes; not a commercially important timber species"
+  }},
   {common:"Dwarf hackberry",scientific:"Celtis pumila",family:"Cannabaceae",order:"Rosales"},
   {common:"Buttonbush",scientific:"Cephalanthus occidentalis",family:"Rubiaceae",order:"Gentianales"},
   {common:"Eastern redbud",scientific:"Cercis canadensis",family:"Fabaceae",order:"Fabales",natHist:{
@@ -510,7 +533,18 @@ const MASTER = [
   {common:"Ginkgo",scientific:"Ginkgo biloba",family:"Ginkgoaceae",order:"Ginkgoales"},
   {common:"Honey locust",scientific:"Gleditsia triacanthos",family:"Fabaceae",order:"Fabales"},
   {common:"Kentucky coffeetree",scientific:"Gymnocladus dioicus",family:"Fabaceae",order:"Fabales"},
-  {common:"Witch hazel",scientific:"Hamamelis virginiana",family:"Hamamelidaceae",order:"Saxifragales"},
+  {common:"Witch hazel",scientific:"Hamamelis virginiana",family:"Hamamelidaceae",order:"Saxifragales",natHist:{
+    epithet:'"Virginiana" means "of or from Virginia"; the genus name Hamamelis comes from Greek words meaning "together with fruit," because flowers appear at the same time as the previous year\'s ripening fruit',
+    familyCommon:"Witch hazel family",
+    wildlifeUse:"Seeds eaten by birds and small mammals; host plant for the spring azure butterfly and several moth species; flowers are pollinated almost exclusively by fungus gnats and parasitoid wasps — the only pollinators still active in late fall",
+    humanUse:"Commercial witch hazel extract distilled from its bark and twigs is widely sold in pharmacies as an astringent for skin care, reducing swelling, and treating minor cuts and bruises",
+    medicinalUse:"Bark and leaves have long been used as an astringent and anti-inflammatory; the largest commercial witch hazel producer in the U.S. harvests it from Connecticut forests",
+    native:"Native",
+    seedDispersal:"Ballistic dispersal — ripe seed capsules split explosively, launching seeds up to 30 feet at speeds of nearly 30 feet per second",
+    fruitType:"Woody capsule (explosively dehiscent)",
+    monoeciousDioecious:"Monoecious (perfect flowers)",
+    floweringSeason:"Late fall to early winter (October-December) — the last native woody plant to flower each year, blooming on bare branches after leaves have dropped"
+  }},
   {common:"English ivy",scientific:"Hedera helix",family:"Araliaceae",order:"Apiales"},
   {common:"Leyland cypress",scientific:"Hesperotropsis leylandii",family:"Cupressaceae",order:"Pinales"},
   {common:"Oakleaf hydrangea",scientific:"Hydrangea quercifolia",family:"Hydrangeaceae",order:"Cornales"},
@@ -528,7 +562,18 @@ const MASTER = [
     woodUse:"Fine white wood used for inlays, marquetry, carvings, and turnings"
   }},
   {common:"Winterberry",scientific:"Ilex verticillata",family:"Aquifoliaceae",order:"Aquifoliales"},
-  {common:"Yaupon holly",scientific:"Ilex vomitoria",family:"Aquifoliaceae",order:"Aquifoliales"},
+  {common:"Yaupon holly",scientific:"Ilex vomitoria",family:"Aquifoliaceae",order:"Aquifoliales",natHist:{
+    epithet:'"Vomitoria" refers to the ceremonial emetic "black drink" made from its leaves by Native Americans — when consumed in large quantities it induced purging as part of ritual cleansing ceremonies',
+    familyCommon:"Holly family",
+    wildlifeUse:"Berries eaten by over 40 bird species and persist through winter when other food is scarce; larval host for the Henry\'s elfin and holly azure butterflies; flowers attract specialized native bees",
+    humanUse:"Leaves contain caffeine — the only native North American plant with significant caffeine content; leaves can be brewed into a tea called yaupon tea; widely planted as an ornamental evergreen hedge",
+    medicinalUse:"Ceremonially used by Native Americans as an emetic and stimulant; the caffeine content was historically valued as a stimulant drink for trade and ceremony",
+    native:"Native",
+    seedDispersal:"Birds (berries eaten and seeds excreted, often far from the parent plant)",
+    fruitType:"Drupe (small, bright red, rarely yellow, persistent through winter)",
+    monoeciousDioecious:"Dioecious (separate male and female plants; only females produce berries)",
+    floweringSeason:"Spring (April-May); small white fragrant flowers"
+  }},
   {common:"Virginia willow",scientific:"Itea virginica",family:"Iteaceae",order:"Saxifragales"},
   {common:"Butternut",scientific:"Juglans cinerea",family:"Juglandaceae",order:"Fagales"},
   {common:"Black walnut",scientific:"Juglans nigra",family:"Juglandaceae",order:"Fagales",natHist:{
@@ -571,7 +616,18 @@ const MASTER = [
   {common:"Drooping leucothoe",scientific:"Leucothoe fontanesiana",family:"Ericaceae",order:"Ericales"},
   {common:"Glossy privet",scientific:"Ligustrum lucidum",family:"Oleaceae",order:"Lamiales"},
   {common:"Chinese privet",scientific:"Ligustrum sinense",family:"Oleaceae",order:"Lamiales"},
-  {common:"Spicebush",scientific:"Lindera benzoin",family:"Lauraceae",order:"Laurales"},
+  {common:"Spicebush",scientific:"Lindera benzoin",family:"Lauraceae",order:"Laurales",natHist:{
+    epithet:'"Benzoin" comes from an Arabic word for aromatic gum, referring to the spicy-sweet fragrance released when any part of the plant is crushed; the genus Lindera honors Swedish botanist Johann Linder',
+    familyCommon:"Laurel family",
+    wildlifeUse:"Primary larval host for the spicebush swallowtail butterfly; fruit is nearly 50% fat — an exceptional energy source for migrating songbirds in fall; also hosts eastern tiger swallowtail and promethea silkmoth",
+    humanUse:"Dried and powdered berries used as a substitute for allspice in cooking; leaves and twigs brewed as a spicy tea; early European settlers used it to treat colds, fevers, and stomachaches",
+    medicinalUse:"Berries, leaves, and bark used by Native Americans and settlers to treat fevers, colds, rheumatism, and as a general tonic",
+    native:"Native",
+    seedDispersal:"Birds (especially fall migrants such as thrushes and vireos, which strip fruits rapidly; the high fat content makes it a key migratory fuel source)",
+    fruitType:"Drupe (bright red, ellipsoidal, on red stalks)",
+    monoeciousDioecious:"Dioecious (separate male and female plants; both needed for fruit production)",
+    floweringSeason:"Very early spring (March-April), before leaves emerge — among the earliest native shrubs to flower"
+  }},
   {common:"Sweetgum",scientific:"Liquidambar styraciflua",family:"Altingiaceae",order:"Saxifragales",natHist:{
     epithet:'"Styraciflua" means "flowing with storax" (a fragrant resin), referring to the aromatic gum that exudes from wounds in the bark',
     familyCommon:"Altingia family",
@@ -782,7 +838,18 @@ const MASTER = [
   {common:"Blackjack oak",scientific:"Quercus marilandica var. marilandica",family:"Fagaceae",order:"Fagales"},
   {common:"Swamp chestnut oak",scientific:"Quercus michauxii",family:"Fagaceae",order:"Fagales"},
   {common:"Chestnut oak",scientific:"Quercus montana",family:"Fagaceae",order:"Fagales"},
-  {common:"Water oak",scientific:"Quercus nigra",family:"Fagaceae",order:"Fagales"},
+  {common:"Water oak",scientific:"Quercus nigra",family:"Fagaceae",order:"Fagales",natHist:{
+    epithet:'"Nigra" means "black," referring to the dark, nearly black bark that develops on mature trunks; the common name references its preference for moist, wet bottomland habitats',
+    familyCommon:"Beech family",
+    wildlifeUse:"Small acorns (among the smallest of any oak) are produced in abundance almost every year, making them a highly reliable food source for ducks, wood ducks, deer, squirrels, wild turkeys, and many songbirds",
+    humanUse:"Fast-growing and widely planted as a shade and street tree in urban Piedmont areas despite being weaker-wooded than most oaks; acorns can be processed into flour",
+    native:"Native",
+    seedDispersal:"Animals (blue jays, squirrels, and ground-foraging birds cache and scatter acorns) and gravity; also dispersed by water in floodplain habitats",
+    fruitType:"Nut (acorn), small and nearly black at maturity; matures in 2 seasons (red oak group)",
+    monoeciousDioecious:"Monoecious",
+    floweringSeason:"Spring (April-May), with leaf emergence",
+    woodUse:"Sold as red oak lumber for flooring, furniture, and construction; considered weaker than other red oaks and shorter-lived"
+  }},
   {common:"Cherrybark oak",scientific:"Quercus pagoda",family:"Fagaceae",order:"Fagales"},
   {common:"Pin oak",scientific:"Quercus palustris",family:"Fagaceae",order:"Fagales"},
   {common:"Willow oak",scientific:"Quercus phellos",family:"Fagaceae",order:"Fagales",natHist:{
@@ -799,7 +866,18 @@ const MASTER = [
   }},
   {common:"Northern red oak",scientific:"Quercus rubra var. rubra",family:"Fagaceae",order:"Fagales"},
   {common:"Shumard oak",scientific:"Quercus shumardii",family:"Fagaceae",order:"Fagales"},
-  {common:"Post oak",scientific:"Quercus stellata",family:"Fagaceae",order:"Fagales"},
+  {common:"Post oak",scientific:"Quercus stellata",family:"Fagaceae",order:"Fagales",natHist:{
+    epithet:'"Stellata" means "star-shaped" in Latin, referring to the stellate (star-shaped) trichome hairs on the undersides of the leaves; the common name comes from its use as fence posts due to its rot-resistant wood',
+    familyCommon:"Beech family",
+    wildlifeUse:"Acorns are an important mast food for deer, turkeys, squirrels, and blue jays; the cross-shaped leaves are distinctive and help identify it as a host for many oak-dependent moth and butterfly species",
+    humanUse:"Extremely rot-resistant wood used historically for fence posts, railroad ties, mine timbers, and flooring — the reason for its common name",
+    native:"Native",
+    seedDispersal:"Animals (scatter-hoarding by squirrels and jays) and gravity",
+    fruitType:"Nut (acorn), matures in a single season (white oak group)",
+    monoeciousDioecious:"Monoecious",
+    floweringSeason:"Spring (March-May), with leaf emergence",
+    woodUse:"Fence posts, railroad ties, mine timbers, flooring, and construction lumber — marketed as white oak"
+  }},
   {common:"Texas red oak",scientific:"Quercus texana",family:"Fagaceae",order:"Fagales"},
   {common:"Black oak",scientific:"Quercus velutina",family:"Fagaceae",order:"Fagales"},
   {common:"Live oak",scientific:"Quercus virginiana",family:"Fagaceae",order:"Fagales"},
@@ -833,7 +911,18 @@ const MASTER = [
     floweringSeason:"Early spring (February-June depending on latitude), usually with or just before leaf emergence",
     woodUse:"Crates, furniture, pulpwood, and artificial limbs; historically used for charcoal (gunpowder) and bank stabilization"
   }},
-  {common:"American elderberry",scientific:"Sambucus canadensis",family:"Adoxaceae",order:"Dipsacales"},
+  {common:"American elderberry",scientific:"Sambucus canadensis",family:"Adoxaceae",order:"Dipsacales",natHist:{
+    epithet:'"Canadensis" means "of or from Canada"; the genus name Sambucus may derive from the Greek sambuce, an ancient flute, because the pithy stems were hollowed out to make whistles and flutes',
+    familyCommon:"Viburnum family",
+    wildlifeUse:"Berries eaten by over 50 bird species and many mammals; flowers attract enormous numbers of native bees and beneficial insects; provides nesting cover for birds; larval host for the spring azure butterfly",
+    humanUse:"Ripe cooked berries used in jams, jellies, pies, and wine; flowers used in fritters and cordials; hollow stems historically used to make flutes, whistles, and spiles for maple sugaring — Note: raw berries and all other plant parts are mildly toxic",
+    medicinalUse:"One of the most widely used medicinal plants in North America and Europe; elderberry syrup is used to reduce duration and severity of colds and flu; contains high levels of antioxidants and vitamin C; bark used as a pain reliever by the Iroquois",
+    native:"Native",
+    seedDispersal:"Birds (berries eaten and seeds widely dispersed) and root suckering (forms dense thickets)",
+    fruitType:"Drupe (small, dark purple-black, in large drooping clusters)",
+    monoeciousDioecious:"Monoecious (perfect flowers)",
+    floweringSeason:"Late spring to early summer (May-July); large flat-topped white flower clusters"
+  }},
   {common:"Sassafras",scientific:"Sassafras albidum",family:"Lauraceae",order:"Laurales",natHist:{
     epithet:'"Albidum" means "whitish," referring to the pale undersides of the leaves',
     familyCommon:"Laurel family",
@@ -1537,15 +1626,53 @@ const PARKS = [
 ];
 
 let mockMode=false, mockPark=null, mockLoading=false;
+let mockSelectedParkIdx = null; // null = random
 
 function openMockQuiz(){
   if(!mySpecies.length){ alert('Add some species to your list first.'); return; }
   document.getElementById('mockStatus').textContent='';
   document.getElementById('mockStartBtn').disabled=false;
-  document.getElementById('mockStartBtn').textContent='Pick a random park';
+  updateMockStartBtn();
   document.getElementById('mockModal').classList.add('open');
 }
 function closeMockModal(){ if(!mockLoading) document.getElementById('mockModal').classList.remove('open'); }
+
+function switchMockTab(mode, btn){
+  document.querySelectorAll('.mock-mode-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('mockRandomPane').style.display = mode==='random' ? 'block' : 'none';
+  document.getElementById('mockChoosePane').style.display = mode==='choose' ? 'block' : 'none';
+  if(mode==='choose') renderParkList();
+  updateMockStartBtn();
+}
+
+function renderParkList(){
+  const list = document.getElementById('parkList');
+  list.innerHTML = PARKS.map((p,i)=>`
+    <label class="park-item ${mockSelectedParkIdx===i?'selected':''}">
+      <input type="radio" name="parkChoice" value="${i}" ${mockSelectedParkIdx===i?'checked':''}
+        onchange="mockSelectedParkIdx=${i}; document.querySelectorAll('.park-item').forEach((el,j)=>el.classList.toggle('selected',j===${i})); updateMockStartBtn()">
+      <div>
+        <div class="park-item-name">${p.name}</div>
+      </div>
+    </label>`).join('');
+}
+
+function updateMockStartBtn(){
+  const btn = document.getElementById('mockStartBtn');
+  const choosePane = document.getElementById('mockChoosePane');
+  const isChooseMode = choosePane && choosePane.style.display === 'block';
+  if(isChooseMode && mockSelectedParkIdx === null){
+    btn.textContent = 'Select a park above';
+    btn.disabled = true;
+  } else if(isChooseMode){
+    btn.textContent = `Start at ${PARKS[mockSelectedParkIdx].short}`;
+    btn.disabled = false;
+  } else {
+    btn.textContent = 'Pick a random park';
+    btn.disabled = false;
+  }
+}
 
 async function startMockQuiz(){
   if(mockLoading) return;
@@ -1553,7 +1680,13 @@ async function startMockQuiz(){
   const btn=document.getElementById('mockStartBtn');
   const status=document.getElementById('mockStatus');
   btn.disabled=true; btn.textContent='Loading…';
-  const park=PARKS[Math.floor(Math.random()*PARKS.length)];
+
+  // Determine which park to use
+  const choosePane = document.getElementById('mockChoosePane');
+  const isChooseMode = choosePane && choosePane.style.display === 'block';
+  const park = (isChooseMode && mockSelectedParkIdx !== null)
+    ? PARKS[mockSelectedParkIdx]
+    : PARKS[Math.floor(Math.random()*PARKS.length)];
   mockPark=park;
   status.textContent=`Fetching recent observations at ${park.short}…`;
   try{
@@ -1585,7 +1718,7 @@ async function startMockQuiz(){
     startMockRound(park,finalSpecies,fallback);
   }catch(e){
     status.textContent='Could not load iNaturalist data. Check your connection and try again.';
-    btn.disabled=false; btn.textContent='Pick a random park';
+    btn.disabled=false; updateMockStartBtn();
   }
   mockLoading=false;
 }
@@ -1630,7 +1763,17 @@ rebuildQuiz();
 <div class="mock-modal-bg" id="mockModal">
   <div class="mock-modal">
     <h2>🌳 Mock field quiz</h2>
-    <p>A random park near Raleigh will be selected and iNaturalist will be queried for the most recently observed plants there. Your quiz will focus on whichever of your studied species are most commonly found at that location.</p>
+    <p>iNaturalist will be queried for the most recently observed plants at the selected location. Your quiz will focus on whichever of your studied species are most commonly found there.</p>
+    <div class="mock-mode-tabs">
+      <button class="mock-mode-tab active" onclick="switchMockTab('random',this)">🎲 Random park</button>
+      <button class="mock-mode-tab" onclick="switchMockTab('choose',this)">📍 Choose a park</button>
+    </div>
+    <div id="mockRandomPane">
+      <p style="font-size:12px;color:var(--text3);margin-bottom:12px;text-align:center">A park near Raleigh will be randomly selected for you.</p>
+    </div>
+    <div id="mockChoosePane" style="display:none">
+      <div class="park-list" id="parkList"></div>
+    </div>
     <div class="mock-status" id="mockStatus"></div>
     <div style="display:flex;gap:8px">
       <button class="btn" style="flex:1" onclick="closeMockModal()">Cancel</button>
